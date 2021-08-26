@@ -267,18 +267,34 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                
-                                                <div class="col-md-5">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Razão Social: <span class="required">*</span></label>
-                                                        <input type="text" class="form-control" name="data[Pessoa][razao_social]" maxlength="250" placeholder="" value="<?=$dados['Pessoa']['razao_social']?>" />
+                                                <div class="col-md-2">
+                                                  <div class="form-group">
+                                                        <label class="control-label">Grupo:</label>
+                                                        <select class="form-control select2" name="data[Pessoa][grupo_id]">
+                                                            <option value="">Sem Grupo</option>
+                                                            <?php foreach ($listaPessoaGrupo as $key => $value) { ?>
+                                                                <?php if ($key != $dados['Pessoa']['grupo_id']) { ?>
+                                                                <option value="<?=$key?>"><?=$value?></option>
+                                                                <?php } else { ?>
+                                                                <option value="<?=$key?>" selected ><?=$value?></option>
+                                                                <?php } // end if?>
+                                                            <?php } // end foreach?>
+                                                        </select>
+                                                        
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-5">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label class="control-label">Nome Fantasia: <span class="required">*</span></label>
                                                         <input type="text" class="form-control" name="data[Pessoa][nome_fantasia]" maxlength="250" placeholder="" value="<?=$dados['Pessoa']['nome_fantasia']?>" />
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Razão Social: <span class="required">*</span></label>
+                                                        <input type="text" class="form-control" name="data[Pessoa][razao_social]" maxlength="250" placeholder="" value="<?=$dados['Pessoa']['razao_social']?>" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -404,13 +420,13 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-actions">
+                                            <!--<div class="form-actions">
                                                 <div class="row">
                                                     <div class="text-center">
                                                         <button class="btn green" type="button" id="btn-prox-loc">Próximo</button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                         </div>
                                     </div>
@@ -506,14 +522,14 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-actions">
+                                            <!--<div class="form-actions">
                                                 <div class="row">
                                                     <div class="text-center">
                                                         <button class="btn default" type="button" id="btn-ant-dadg">Anterior</button>
                                                         <button class="btn green" type="button" id="btn-prox-bank">Próximo</button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                         </div>
                                     </div>
@@ -616,14 +632,14 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-actions">
+                                            <!--<div class="form-actions">
                                                 <div class="row">
                                                     <div class="text-center">
                                                         <button class="btn default" type="button" id="btn-ant-loc">Anterior</button>
                                                         <button class="btn green" type="submit">Salvar</button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                         </div>
                                     </div>
@@ -631,14 +647,14 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="form-actions">
+                    <div class="form-actions">
                         <div class="row">
-                            <div class="col-md-offset-8 ">
-                                <button class="btn green" type="submit">Salvar</button>
+                            <div class="text-right">
                                 <button class="btn default" type="reset">Limpar Campos</button>
+                                <button class="btn green" type="submit">Salvar</button>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </form>
                 <!-- END FORM-->
             </div>

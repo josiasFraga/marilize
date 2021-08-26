@@ -281,15 +281,15 @@ class PessoasController extends AppController {
 
 		$this->loadModel('PessoaTipo');
 		$listaPessoaTipo = $this->PessoaTipo->listaPessoaTipo();
+		$this->loadModel('PessoaGrupo');
+		$listaPessoaGrupo = $this->PessoaGrupo->listaPessoaGrupo();
 
-		$this->set(compact('dados', 'listaPessoaTipo'));
+		$this->set(compact('dados', 'listaPessoaTipo', 'listaPessoaGrupo'));
 
 	}
 
 	public function imprimir($tipo) {
 		$this->layout = 'pdf';
-
-		
 
 		if ($tipo == 'clientes') {
 			$tipo = 1;
