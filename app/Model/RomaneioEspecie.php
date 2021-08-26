@@ -24,9 +24,7 @@ class RomaneioEspecie extends AppModel {
     );
 
 	public function beforeSave($options = array()) {
-        if ( isset($this->data[$this->alias]['especie']) && !is_null($this->data[$this->alias]['especie']) && !empty($this->data[$this->alias]['especie'])) {
-            $this->data[$this->alias]['especie'] = mb_strtoupper($this->data[$this->alias]['especie']);
-        }
+
     }
     
     public function listaRomaneioEspecie() {

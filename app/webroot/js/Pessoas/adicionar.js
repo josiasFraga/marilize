@@ -65,7 +65,7 @@ var Adicionar = function () {
                         success.show();
                         error.hide();
                         warning.hide();
-                        $('#outro_cadastro').show();
+                        window.location.href = baseUrl+"Pessoas/alterar/"+data.id;
                     }else if(data.status == "warning"){
                         $("form#adicionar-pessoa .alert-warning span.message").html(data.msg);
                         warning.show();

@@ -5,7 +5,7 @@
         </p>
     </div>
     <div class="top-right text-right">
-        <img src="https://orelhano.com.br/img/logo.png" class="cliente-logo">
+        <img src="https://zapshop.com.br/sorato/logo_dark.png" class="cliente-logo">
     </div>
 </div>
 <table class="table">

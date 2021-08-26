@@ -224,7 +224,9 @@
                         <a href="#tab_3" data-toggle="tab" id="btn-bank"> Bancos </a>
                     </li>
                 </ul>
-                <div class="actions"></div>
+                <div class="actions">
+			        <a role="button" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'Pessoas', 'action' => 'adicionar')) ?>" class="btn btn-circle btn-default" id="outro_cadastro"><i class="fa fa-plus"></i> Incluir Outra Pessoa </a>
+		        </div>
             </div>
             <div class="portlet-body">
                 <!-- BEGIN FORM-->

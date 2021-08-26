@@ -116,11 +116,12 @@ var Index = function () {
 				},
 
 			"aoColumns": [
+				{},
+				{},
+				{},
+				{},
 				{'bSortable' : false, "sClass": "text-center"},
-				{"sClass": "text-center"},
-				{"sClass": "text-center"},
-				{"sClass": "text-center"},
-				{"sClass": "text-center"},
+				{'bSortable' : false, "sClass": "text-center"},
 				{'bSortable' : false, "sClass": "text-center"}
 			],
 

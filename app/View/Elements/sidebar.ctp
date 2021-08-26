@@ -32,16 +32,8 @@
 				<ul class="sub-menu">
 					<li class="<?php echo ((strtolower($this->params['controller']) == "pessoas") && $menu_pessoas == 'clientes') ? 'active' : ''; ?>">
 						<a href="<?php echo $this->Html->url(array('controller' => 'Pessoas', 'action' => 'index')) ?>">
-						Clientes</a>
-					</li>
-					<li class="<?php echo ((strtolower($this->params['controller']) == "pessoas") && $menu_pessoas == 'fornecedores') ? 'active' : ''; ?>">
-						<a href="<?php echo $this->Html->url(array('controller' => 'pessoas', 'action' => 'index', 'fornecedores')) ?>">
-						Fornecedores</a>
-					</li>
-					<li class="<?php echo (strtolower($this->params['controller']) == "especies") ? 'active' : ''; ?>">
-						<a href="<?php echo $this->Html->url(array('controller' => 'Especies', 'action' => 'index')) ?>">
-						Espécies</a>
-					</li>					
+						Pessoas</a>
+					</li>		
 				</ul>
 
 			</li>
@@ -71,33 +63,6 @@
 					</li>
 				</ul>
 
-			</li>
-
-			<li class="nav-item start <?php echo (strtolower($this->params['controller']) == 'romaneiogordo') ? 'active open' : '' ?>">
-				<a href="<?php echo $this->Html->url(array('controller' => 'RomaneioGordo', 'action' => 'index')) ?>" class="nav-link nav-toggle">
-					<i class="fa fa-file"></i>
-					<span class="title">Romaneio Gordo</span>
-					<span class="selected"></span>
-					<!-- <span class="arrow"></span> -->
-				</a>
-			</li>
-
-			<li class="nav-item start <?php echo (strtolower($this->params['controller']) == 'romaneioinvernar') ? 'active open' : '' ?>">
-				<a href="<?php echo $this->Html->url(array('controller' => 'RomaneioInvernar', 'action' => 'index')) ?>" class="nav-link nav-toggle">
-					<i class="fa fa-file-o"></i>
-					<span class="title">Romaneio Invernar</span>
-					<span class="selected"></span>
-					<!-- <span class="arrow"></span> -->
-				</a>
-			</li>
-
-			<li class="nav-item start <?php echo (strtolower($this->params['controller']) == 'adiantamentos') ? 'active open' : '' ?>">
-				<a href="<?php echo $this->Html->url(array('controller' => 'adiantamentos', 'action' => 'index')) ?>" class="nav-link nav-toggle">
-					<i class="fa fa-money"></i>
-					<span class="title">Adiantamentos</span>
-					<span class="selected"></span>
-					<!-- <span class="arrow"></span> -->
-				</a>
 			</li>
 
 			<li class="nav-item start <?php echo (strtolower($this->params['controller']) == 'usuarios') ? 'active open' : '' ?>">

@@ -25,18 +25,7 @@ class PessoaLocalidade extends AppModel {
 	);
 
 	public function beforeSave($options = array()) {
-		if ( isset($this->data['PessoaLocalidade']['descricao']) && !empty($this->data['PessoaLocalidade']['descricao']) ) {
-			$this->data['PessoaLocalidade']['descricao'] = mb_strtoupper($this->data['PessoaLocalidade']['descricao']);
-		}
-		if ( isset($this->data['PessoaLocalidade']['cidade']) && !empty($this->data['PessoaLocalidade']['cidade']) ) {
-			$this->data['PessoaLocalidade']['cidade'] = mb_strtoupper($this->data['PessoaLocalidade']['cidade']);
-		}
-		if ( isset($this->data['PessoaLocalidade']['estado']) && !empty($this->data['PessoaLocalidade']['estado']) ) {
-			$this->data['PessoaLocalidade']['estado'] = mb_strtoupper($this->data['PessoaLocalidade']['estado']);
-		}
-		if ( isset($this->data['PessoaLocalidade']['localidade']) && !empty($this->data['PessoaLocalidade']['localidade']) ) {
-			$this->data['PessoaLocalidade']['localidade'] = mb_strtoupper($this->data['PessoaLocalidade']['localidade']);
-		}
+
 		
 		return true;
 	}

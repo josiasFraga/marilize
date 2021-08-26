@@ -25,13 +25,7 @@ class PessoaBanco extends AppModel {
 	);
 
 	public function beforeSave($options = array()) {
-		if ( isset($this->data['PessoaBanco']['banco']) && !empty($this->data['PessoaBanco']['banco']) ) {
-			$this->data['PessoaBanco']['banco'] = mb_strtoupper($this->data['PessoaBanco']['banco']);
-		}
-		if ( isset($this->data['PessoaBanco']['titular']) && !empty($this->data['PessoaBanco']['titular']) ) {
-			$this->data['PessoaBanco']['titular'] = mb_strtoupper($this->data['PessoaBanco']['titular']);
-		}
-		
+
 		return true;
 	}
 

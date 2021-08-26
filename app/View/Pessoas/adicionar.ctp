@@ -46,9 +46,6 @@
                         <a href="#tab_3" data-toggle="tab" id="btn-bank"> Bancos </a>
                     </li>
                 </ul>
-                <div class="actions">
-			        <a role="button" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'Pessoas', 'action' => 'adicionar')) ?>" class="btn btn-circle btn-default display-hide" id="outro_cadastro"><i class="fa fa-plus"></i> Incluir Outra Pessoa </a>
-		        </div>
             </div>
             <div class="portlet-body">
                 <!-- BEGIN FORM-->
@@ -76,26 +73,39 @@
                                                 <div class="col-md-2">
                                                   <div class="form-group">
                                                         <label class="control-label">Tipo Pessoa: <span class="required">*</span></label>
-                                                        <select class="form-control select2" name="data[Pessoa][tipo_pessoa_id]">
+                                                        <select class="form-control select2 required" name="data[Pessoa][tipo_pessoa_id]">
                                                             <option value="">Selecione ...</option>
                                                             <?php foreach ($listaPessoaTipo as $key => $value) { ?>
                                                             <option value="<?=$key?>"><?=$value?></option>
                                                             <?php } // end foreach?>
                                                         </select>
+                                                        
                                                     </div>
                                                 </div>
-                                                
-                                                <div class="col-md-5">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Razão Social: <span class="required">*</span></label>
-                                                        <input type="text" class="form-control" name="data[Pessoa][razao_social]" maxlength="250" placeholder=""/>
+                                                <div class="col-md-2">
+                                                  <div class="form-group">
+                                                        <label class="control-label">Grupo:</label>
+                                                        <select class="form-control select2" name="data[Pessoa][grupo_id]">
+                                                            <option value="">Sem Grupo</option>
+                                                            <?php foreach ($listaPessoaGrupo as $key => $value) { ?>
+                                                            <option value="<?=$key?>"><?=$value?></option>
+                                                            <?php } // end foreach?>
+                                                        </select>
+                                                        
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-5">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label class="control-label">Nome Fantasia: <span class="required">*</span></label>
-                                                        <input type="text" class="form-control" name="data[Pessoa][nome_fantasia]" maxlength="250" placeholder="" />
+                                                        <input type="text" class="form-control required" name="data[Pessoa][nome_fantasia]" maxlength="250" placeholder="" />
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Razão Social: </label>
+                                                        <input type="text" class="form-control" name="data[Pessoa][razao_social]" maxlength="250" placeholder=""/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -103,14 +113,14 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label">CNPJ: <span class="required">*</span></label>
+                                                        <label class="control-label">CNPJ:</label>
                                                         <input type="text" class="form-control cnpj" name="data[Pessoa][cnpj]" maxlength="18" placeholder="" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label">CPF: <span class="required">*</span></label>
+                                                        <label class="control-label">CPF:</label>
                                                         <input type="text" class="form-control cpf" name="data[Pessoa][cpf]" maxlength="14" placeholder="" />
                                                     </div>
                                                 </div>
@@ -121,21 +131,21 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label class="control-label">CEP: <span class="required">*</span></label>
+                                                        <label class="control-label">CEP: </label>
                                                         <input type="text" class="form-control cep" name="data[Pessoa][cep]" id="cep" maxlength="9" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label">Cidade: <span class="required">*</span></label>
+                                                        <label class="control-label">Cidade: </label>
                                                         <input type="text" class="form-control" name="data[Pessoa][cidade]" id="cidade" maxlength="250" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label class="control-label">Estado (UF): <span class="required">*</span></label>
+                                                        <label class="control-label">Estado (UF): </label>
                                                         <input type="text" class="form-control" name="data[Pessoa][estado]" id="uf" maxlength="2" minlength="2" />
                                                     </div>
                                                 </div>
@@ -144,14 +154,14 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label">Endereço: <span class="required">*</span></label>
+                                                        <label class="control-label">Endereço: </label>
                                                         <input type="text" class="form-control" name="data[Pessoa][endereco]" maxlength="250" id="logradouro" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label class="control-label">Número: <span class="required">*</span></label>
+                                                        <label class="control-label">Número: </label>
                                                         <input type="text" class="form-control" name="data[Pessoa][numero]" maxlength="20" />
                                                     </div>
                                                 </div>
@@ -178,7 +188,7 @@
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label class="control-label">Telefone [1]: <span class="required">*</span></label>
+                                                        <label class="control-label">Telefone [1]: </label>
                                                         <input type="text" class="form-control phone" name="data[Pessoa][telefone1]" maxlength="15" />
                                                     </div>
                                                 </div>
@@ -208,7 +218,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label">Email: <span class="required">*</span></label>
+                                                        <label class="control-label">Email: </label>
                                                         <input type="text" class="form-control" name="data[Pessoa][email]" maxlength="250" />
                                                     </div>
                                                 </div>
@@ -221,13 +231,13 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-actions">
+                                            <!--<div class="form-actions">
                                                 <div class="row">
                                                     <div class="text-center">
                                                         <button class="btn green" type="button" id="btn-prox-loc">Próximo</button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                         </div>
                                     </div>
@@ -243,21 +253,21 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label">Descrição: <span class="required">*</span></label>
+                                                        <label class="control-label">Descrição: </label>
                                                         <input type="text" class="form-control" name="data[aux][PessoaLocalidade_descricao]" maxlength="250" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label class="control-label">Inscrição Estadual: <span class="required">*</span></label>
+                                                        <label class="control-label">Inscrição Estadual: </label>
                                                         <input type="text" class="form-control numero" name="data[aux][PessoaLocalidade_inscricao_estadual]" maxlength="50" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label class="control-label">Estado (UF): <span class="required">*</span></label>
+                                                        <label class="control-label">Estado (UF): </label>
                                                         <input type="text" class="form-control" name="data[aux][PessoaLocalidade_estado]" maxlength="2" minlength="2" />
                                                     </div>
                                                 </div>
@@ -266,14 +276,14 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label class="control-label">Cidade: <span class="required">*</span></label>
+                                                        <label class="control-label">Cidade: </label>
                                                         <input type="text" class="form-control" name="data[aux][PessoaLocalidade_cidade]" maxlength="250" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-5">
                                                     <div class="form-group">
-                                                        <label class="control-label">Localidade: <span class="required">*</span></label>
+                                                        <label class="control-label">Localidade: </label>
                                                         <input type="text" class="form-control" name="data[aux][PessoaLocalidade_localidade]" maxlength="250" />
                                                     </div>
                                                 </div>
@@ -306,14 +316,14 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-actions">
+                                            <!--<div class="form-actions">
                                                 <div class="row">
                                                     <div class="text-center">
                                                         <button class="btn default" type="button" id="btn-ant-dadg">Anterior</button>
                                                         <button class="btn green" type="button" id="btn-prox-bank">Próximo</button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                         </div>
                                     </div>
@@ -329,14 +339,14 @@
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label class="control-label">Nome Banco: <span class="required">*</span></label>
+                                                        <label class="control-label">Nome Banco: </label>
                                                         <input type="text" class="form-control" name="data[aux][PessoaBanco_banco]" maxlength="250" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-5">
                                                     <div class="form-group">
-                                                        <label class="control-label">Titular: <span class="required">*</span></label>
+                                                        <label class="control-label">Titular: </label>
                                                         <input type="text" class="form-control" name="data[aux][PessoaBanco_titular]" maxlength="250" />
                                                     </div>
                                                 </div>
@@ -352,14 +362,14 @@
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label class="control-label">Conta: <span class="required">*</span></label>
+                                                        <label class="control-label">Conta: </label>
                                                         <input type="text" class="form-control" name="data[aux][PessoaBanco_conta]" maxlength="50" />
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label class="control-label">Agência: <span class="required">*</span></label>
+                                                        <label class="control-label">Agência: </label>
                                                         <input type="text" class="form-control" name="data[aux][PessoaBanco_agencia]" maxlength="50" />
                                                     </div>
                                                 </div>
@@ -399,14 +409,14 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-actions">
+                                            <!--<div class="form-actions">
                                                 <div class="row">
                                                     <div class="text-center">
                                                         <button class="btn default" type="button" id="btn-ant-loc">Anterior</button>
                                                         <button class="btn green" type="submit">Salvar</button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                         </div>
                                     </div>
@@ -414,14 +424,14 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="form-actions">
+                    <div class="form-actions">
                         <div class="row">
-                            <div class="col-md-offset-8 ">
-                                <button class="btn green" type="submit">Salvar</button>
+                            <div class="text-right ">
                                 <button class="btn default" type="reset">Limpar Campos</button>
+                                <button class="btn green" type="submit">Salvar</button>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </form>
                 <!-- END FORM-->
             </div>

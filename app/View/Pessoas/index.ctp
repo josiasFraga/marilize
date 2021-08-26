@@ -34,14 +34,14 @@
                 <div class="actions">
                     <a role="button" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'Pessoas', 'action' => 'adicionar')) ?>" class="btn btn-circle btn-success">
                         <i class="fa fa-plus"></i> Incluir </a>
-                        <?php if ($menu_pessoas == 'fornecedores'): ?>
+                        <!--<?php if ($menu_pessoas == 'fornecedores'): ?>
                     <a role="button" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'Pessoas', 'action' => 'imprimir', $menu_pessoas)) ?>" class="btn btn-circle btn-default">
                         <i class="fa fa-print"></i> Imprimir Contas Bancárias</a>
                         <?php endif; ?>
                         <?php if ($menu_pessoas == 'clientes'): ?>
                     <a role="button" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'Pessoas', 'action' => 'imprimir', $menu_pessoas)) ?>" class="btn btn-circle btn-default">
                         <i class="fa fa-print"></i> Imprimir Clientes</a>
-                        <?php endif; ?>
+                        <?php endif; ?>-->
                 </div>
             </div>
             <div class="portlet-body">
@@ -52,6 +52,7 @@
                                 <th class="table-checkbox" width="20px">
                                     <input type="checkbox" class="group-checkable" data-set="#table-pessoas .checkboxes"/>
                                 </th>
+                                <th>Tipo</th>
                                 <th>Razão Social</th>
                                 <th>Nome Fantasia</th>
                                 <th>Telefone (1)</th>
@@ -60,6 +61,13 @@
                             </tr>
                             <tr role="row" class="filter">
                                 <td></td>
+                                <td>                                    
+                                    <select type="text" class="form-control form-filter input-sm" name="tipo">
+                                        <option value="">[Tipo]</option>
+                                        <option value="1">Cliente</option>
+                                        <option value="2">Fornecedor</option>
+                                    </select>
+                                </td>
                                 <td><input type="text" class="form-control form-filter input-sm" name="razao_social"></td>
                                 <td><input type="text" class="form-control form-filter input-sm" name="nome_fantasia"></td>
                                 <td><input type="text" class="form-control form-filter input-sm" name="telefone1"></td>
