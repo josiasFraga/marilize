@@ -8,7 +8,7 @@
 
 	<head>
 		<meta charset="utf-8" />
-		<title>Orelhano | <?php echo $title_for_layout ?></title>
+		<title>Marilize | <?php echo $title_for_layout ?></title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta content="width=device-width, initial-scale=1" name="viewport" />
 		<meta content="" name="description" />
@@ -42,16 +42,6 @@
 
 		<!--Start of Zendesk Chat Script-->
 		<!--End of Zendesk Chat Script-->
-
-		<style type="text/css">
-			.page-header.navbar {
-				background: #fff !important;
-			}
-
-			.page-header.navbar .top-menu .navbar-nav>li.dropdown-language>.dropdown-toggle>.langname, .page-header.navbar .top-menu .navbar-nav>li.dropdown-user>.dropdown-toggle>.username, .page-header.navbar .top-menu .navbar-nav>li.dropdown-user>.dropdown-toggle>i {
-				color: #000 !important;
-			}
-		</style>
 		</head>
 	<!-- END HEAD -->
 
@@ -63,7 +53,7 @@
 				<!-- BEGIN LOGO -->
 				<div class="page-logo">
 					<a href="#">
-						<img src="<?php echo $this->webroot.$logo;?>" style="width: 150px; margin: 1px 0px 0" alt="logo" class="logo-default" /> </a>
+						<img src="<?php echo $this->webroot.$logo;?>" style="width: 150px" alt="logo" class="logo-default" /> </a>
 					<div class="menu-toggler sidebar-toggler">
 						<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 					</div>

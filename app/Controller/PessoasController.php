@@ -549,7 +549,7 @@ class PessoasController extends AppController {
 $this->Mpdf->packTableData  = true; // necessario pq não gerava pq tinha mt registro
         $this->Mpdf->setFilename('file.pdf');
         $this->Mpdf->setOutput('I');
-        $this->Mpdf->SetFooter("Orelhano - Fornecedores");
+        $this->Mpdf->SetFooter("Marilize - Fornecedores");
 		$this->Mpdf->SetWatermarkText("Draft");
 		
 	}
@@ -581,7 +581,7 @@ $this->Mpdf->packTableData  = true; // necessario pq não gerava pq tinha mt reg
 $this->Mpdf->packTableData  = true; // necessario pq não gerava pq tinha mt registro
         $this->Mpdf->setFilename('file.pdf');
         $this->Mpdf->setOutput('I');
-        $this->Mpdf->SetFooter("Orelhano - Conta Bancária");
+        $this->Mpdf->SetFooter("Marilize - Conta Bancária");
 		$this->Mpdf->SetWatermarkText("Draft");
 		
 	}

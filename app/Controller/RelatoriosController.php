@@ -214,7 +214,7 @@ class RelatoriosController extends AppController {
 
 		// setting output to I, D, F, S
 		$this->Mpdf->setOutput('I');
-		$this->Mpdf->SetFooter("Orelhano - Romaneios em Aberto");
+		$this->Mpdf->SetFooter("Marilize - Romaneios em Aberto");
 
 		// you can call any mPDF method via component, for example:
 		$this->Mpdf->SetWatermarkText("Draft");

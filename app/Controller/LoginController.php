@@ -16,7 +16,7 @@ class LoginController extends AppController {
 	public $uses = array('User');
 
 	public function senha() {
-		exit(debug(AuthComponent::password('sdfsdf')));		
+		exit(debug(AuthComponent::password('zap123')));		
 	}
 
 	public function entrar() {

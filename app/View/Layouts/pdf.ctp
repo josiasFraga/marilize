@@ -4,7 +4,7 @@
 	<!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Orelhano | <?php echo $title_for_layout ?></title>
+	<title>Marilize | <?php echo $title_for_layout ?></title>
 
     <style type="text/css">
     *{ margin:0; padding: 0; }

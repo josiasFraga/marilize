@@ -1,1 +1,5 @@
 div.selection-cliente-propriedade{ position: relative; float: left; margin-top:22px; display: inline-table; }
+.page-header.navbar {background: #3B3F51;border-bottom: 1px solid #e9ecf3;}
+.page-header.navbar .page-logo .logo-default {
+    margin: 29px 10px 0;
+}

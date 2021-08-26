@@ -12,7 +12,7 @@
 <div class="page-head">
 	<!-- BEGIN PAGE TITLE -->
 	<div class="page-title">
-		<h1>Sistema de Gestão Orelhano
+		<h1>Sistema de Gestão Marilize
 			<small>página inicial</small>
 		</h1>
 	</div>

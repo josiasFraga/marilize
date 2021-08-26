@@ -213,7 +213,7 @@ class RomaneioGordoController extends RomaneioController {
 
         // setting output to I, D, F, S
         $this->Mpdf->setOutput('I');
-        $this->Mpdf->SetFooter("Orelhano - Romaneios");
+        $this->Mpdf->SetFooter("Marilize - Romaneios");
 
         // you can call any mPDF method via component, for example:
         $this->Mpdf->SetWatermarkText("Draft");

@@ -382,7 +382,7 @@ class AdiantamentosController extends AppController {
 		$this->Mpdf->packTableData  = true; // necessario pq não gerava pq tinha mt registro
         $this->Mpdf->setFilename('file.pdf');
         $this->Mpdf->setOutput('I');
-        $this->Mpdf->SetFooter("Orelhano - Adiantamentos");
+        $this->Mpdf->SetFooter("Marilize - Adiantamentos");
 		$this->Mpdf->SetWatermarkText("Draft");
         
         $this->set(compact('dados'));
