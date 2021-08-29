@@ -14,8 +14,8 @@ class PagamentoData extends AppModel {
         'PagamentoForma' => [
             'foreignKey' => 'forma_id'
         ],
-        'Empresa' => [
-            'foreignKey' => 'empresa_id'
+        'Fazenda' => [
+            'foreignKey' => 'fazenda_id'
         ],
         'Pessoa' => [
             'foreignKey' => 'fornecedor_id'

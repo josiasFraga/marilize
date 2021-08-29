@@ -22,14 +22,14 @@ class ContasPagarController extends ContasController {
         $this->loadModel('PagamentoForma');
         $listformas = $this->PagamentoForma->listaPagamentoForma();
 
-        $this->loadModel('Empresa');
-        $empresas = $this->Empresa->listaEmpresas();
+        $this->loadModel('Fazenda');
+        $fazendas = $this->Fazenda->listaFazendas();
 
         $this->loadModel('Pessoa');
         $fornecedores = $this->Pessoa->findListAllPessoas(2);
 
 
-        $this->set(compact('status', 'categorias', 'listformas', 'empresas', 'fornecedores'));
+        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores'));
     }
 
     
