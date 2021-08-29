@@ -21,7 +21,7 @@
 				</a>
 			</li>
 
-			<li class="<?php echo (in_array(strtolower($this->params['controller']), array('pessoas', 'fazendas', 'bancos', 'filiais', 'centrocustos', 'documentos'))) ? 'active open' : ''; ?>">
+			<li class="<?php echo (in_array(strtolower($this->params['controller']), array('pessoas', 'fazendas', 'safras', 'filiais', 'centrocustos', 'documentos'))) ? 'active open' : ''; ?>">
 
 				<a href="javascript:;">
 					<i class="fa fa-database"></i>
@@ -33,6 +33,10 @@
 					<li class="<?php echo ((strtolower($this->params['controller']) == "fazendas")) ? 'active' : ''; ?>">
 						<a href="<?php echo $this->Html->url(array('controller' => 'Fazendas', 'action' => 'index')) ?>">
 						Fazendas</a>
+					</li>
+					<li class="<?php echo ((strtolower($this->params['controller']) == "safras")) ? 'active' : ''; ?>">
+						<a href="<?php echo $this->Html->url(array('controller' => 'Safras', 'action' => 'index')) ?>">
+						Safras</a>
 					</li>
 
 					<li class="<?php echo ((strtolower($this->params['controller']) == "pessoas")) ? 'active' : ''; ?>">
