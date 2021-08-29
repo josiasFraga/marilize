@@ -6,12 +6,7 @@ class Usuario extends AppModel {
     public $name = 'Usuario';
 
 	public $hasMany = array(
-		'UsuarioSistemaPermissao' => array(
-			'foreignKey' => 'usuario_id'
-		),
-		'Token' => array(
-			'foreignKey' => 'usuario_id'
-		),
+
 	);
 
 	// public $belongsTo = array();

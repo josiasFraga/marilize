@@ -207,9 +207,6 @@ class UsuariosController extends AppController {
 			$this->layout = "ajax";
 			return $this->save();
         }
-        $this->loadModel('SistemaPermissao');
-        $permissoes = $this->SistemaPermissao->listaSistemaPermissaoFiltroActionIndex();
-        $this->set(compact('permissoes'));
 	}
 
     private function save() {

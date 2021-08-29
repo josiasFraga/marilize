@@ -44,7 +44,7 @@
 					<div class="form-body">
 
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-12">
 		
 								<div class="row">
 									<div class="col-md-12">
@@ -106,29 +106,6 @@
 										</div>
 									</div>
 								</div><!-- ./row -->
-
-							</div><!-- ./col -->
-							<div class="col-md-6">
-
-								<div class="form-group">
-									<label class="control-label bold">Permissões: </label>
-									<div class="input-group">
-										<div class="icheck-list">
-											<div class="row">
-												<!-- <div class="col-md-6">
-													<label class="checkl" data-check="check0">
-														<input type="checkbox" name="data[UsuarioSistemaPermissao][][sistema_permissao_id]" value="0" class="icheck"> TODAS PERMISSÕES </label>
-												</div> -->
-											<?php foreach( $permissoes as $id => $permissao ){ ?>
-												<div class="col-md-12">
-													<label class="checkl" data-check="check<?=$id?>">
-														<input type="checkbox" name="data[UsuarioSistemaPermissao][][sistema_permissao_id]" value="<?=$id?>" class="icheck"> <?=$permissao?> </label>
-												</div>
-											<?php } ?>
-											</div><!-- ./row -->
-										</div>
-									</div>
-								</div>
 
 							</div><!-- ./col -->
 						</div><!-- ./row -->
