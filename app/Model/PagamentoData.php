@@ -19,6 +19,12 @@ class PagamentoData extends AppModel {
         ],
         'Pessoa' => [
             'foreignKey' => 'fornecedor_id'
+        ],
+        'ContaGrupo' => [
+            'foreignKey' => 'grupo_id'
+        ],
+        'ContaSubgrupo' => [
+            'foreignKey' => 'subgrupo_id'
         ]
     ];
 

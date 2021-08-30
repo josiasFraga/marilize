@@ -27,9 +27,14 @@ class ContasPagarController extends ContasController {
 
         $this->loadModel('Pessoa');
         $fornecedores = $this->Pessoa->findListAllPessoas(2);
+    
+        $this->loadModel('Safra');
+        $safras = $this->Safra->listaSafras();
+
+        $safra_atual = $this->Safra->buscaSafraAtual();
 
 
-        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores'));
+        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual'));
     }
 
     
@@ -96,13 +101,17 @@ class ContasPagarController extends ContasController {
         $this->loadModel('PagamentoForma');
         $listformas = $this->PagamentoForma->listaPagamentoForma();
 
-        $this->loadModel('Empresa');
-        $empresas = $this->Empresa->listaEmpresas();
+        $this->loadModel('Fazenda');
+        $empresas = $this->Fazenda->listaFazendas();
 
         $this->loadModel('Pessoa');
         $fornecedores = $this->Pessoa->findListAllPessoas(2);
 
-        $this->set(compact('status', 'categorias', 'listformas', 'empresas', 'fornecedores'));
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
+
+
+        $this->set(compact('status', 'categorias', 'listformas', 'empresas', 'fornecedores', 'grupos'));
     }
     
     public function alterar($id = null) {

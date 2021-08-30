@@ -90,6 +90,45 @@
 							</div>
 						</div>
 					</div>
+                    <div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Categoria: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][categoria_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($categorias as $key => $categoria) { ?>
+                                    <option value="<?=$key?>"><?=$categoria?></option>
+                                <?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Grupo: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][grupo_id]" id="grupo_id">
+									<option value="">Selecione ...</option>
+								<?php foreach ($grupos as $key => $categoria) { ?>
+                                    <option value="<?=$key?>"><?=$categoria?></option>
+                                <?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Subgrupo: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][subgrupo_id]" id="subgrupo_id">
+									<option value="">selecione um grupo ...</option>
+								</select>
+							</div>
+						</div>
+					</div>
 					<div class="col-md-3">
 						<div class="form-group">
 							<label class="control-label">Data de Vencimento: <span class="required">*</span></label>
@@ -128,20 +167,6 @@
 							<label class="control-label">Nº Documento:</label>
 							<div class="">
 								<input type="text" class="form-control" name="data[PagamentoData][ndocumento]" />
-							</div>
-						</div>
-					</div>
-                    <div class="col-md-12">
-						<div class="form-group">
-							<label class="control-label">Categoria Pagamento: <span class="required">*</span></label>
-							<div class="">
-								<!--<i class="fa"></i>-->
-								<select class="form-control select2" name="data[PagamentoData][categoria_id]">
-									<option value="">Selecione ...</option>
-								<?php foreach ($categorias as $key => $categoria) { ?>
-                                    <option value="<?=$key?>"><?=$categoria?></option>
-                                <?php } ?>
-								</select>
 							</div>
 						</div>
 					</div>

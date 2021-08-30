@@ -186,7 +186,7 @@
 			</div>
 			<div class="actions">
 				<a role="button" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'ContasPagar', 'action' => 'adicionar')) ?>" class="btn btn-circle btn-success">
-					<i class="fa fa-plus"></i> Incluir Conta à Pagar</a>
+					<i class="fa fa-plus"></i> Incluir Despesa</a>
 				<a role="button" target="_BLANK" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'ContasPagar', 'action' => 'imprimir')) ?>" class="btn btn-circle btn-default">
 					<i class="fa fa-print"></i> Imprimir</a>
 				<div class="btn-group">
@@ -222,9 +222,10 @@
 							<th class="table-checkbox" width="20px">
 								<input type="checkbox" class="group-checkable" data-set="#table-pagarpagamentos .checkboxes"/>
 							</th>
+							<th>Safra</th>
 							<th>Vencimento em</th>
 							<th>Pagamento em</th>
-							<th width="15%">Empresa</th>
+							<th width="15%">Fazenda</th>
 							<th width="15%">Fornecedor</th>
 							<th width="10%">Categoria</th>
 							<th>Nº Parcela</th>
@@ -236,6 +237,24 @@
 						<tr role="row" class="filter">
 							<td></td>
 							<td>
+								<select class="form-control form-filter input-sm select2" name="safra_id">
+									<option value="">[Safra]</option>
+									<?php 
+									foreach ($safras as $key => $nome) {
+										if ( isset($safra_atual['Safra']) && isset($safra_atual['Safra']['id']) && $safra_atual['Safra']['id'] == $key ):
+									?>
+										<option value="<?=$key?>" selected="selected"><?=$nome?></option>
+									<?php 
+										else:
+											?>
+												<option value="<?=$key?>"><?=$nome?></option>
+											<?php 
+										endif;
+									}
+									?>
+								</select>
+							</td>
+							<td>
 								<input type="date" class="form-control form-filter input-sm" name="data_venc" value="<?= date('Y-m-01') ?>" style="margin-bottom:4px">
 								<input type="date" class="form-control form-filter input-sm" name="data_venc_ate" value="<?= date('Y-m-t') ?>">
 							</td>
@@ -244,9 +263,9 @@
 								<input type="date" class="form-control form-filter input-sm" name="data_pgto_ate" value="">
 							</td>
 							<td>
-								<select class="form-control form-filter input-sm select2" name="empresa_id">
+								<select class="form-control form-filter input-sm select2" name="fazenda_id">
 									<option value="">Selecione ...</option>
-									<?php foreach ($empresas as $key => $nome) { ?>
+									<?php foreach ($fazendas as $key => $nome) { ?>
 										<option value="<?=$key?>"><?=$nome?></option>
 									<?php } ?>
 								</select>

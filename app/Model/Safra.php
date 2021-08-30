@@ -51,4 +51,15 @@ class Safra extends AppModel {
         ));
     }
 
+	public function buscaSafraAtual(){
+		return $this->find('first',[
+			'conditions' => [
+				'Safra.inicio <=' => date('Y-m-d'),
+				'Safra.fim >=' => date('Y-m-d'),
+				'Safra.ativa' => 'Y'
+			],
+			'link' => []
+		]);
+	}
+
 }

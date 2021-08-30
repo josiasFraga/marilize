@@ -27,7 +27,7 @@ class DashboardController extends AppController {
 
         $this->set('title_for_layout', 'Início');
 
-        $this->loadModel('Romaneio');
+        /*$this->loadModel('Romaneio');
         $romaneios_gordo_vencimentos = $this->Romaneio->RomaneioVencimento->find('all', [
             'fields' => [
                 'Romaneio.id',
@@ -70,7 +70,7 @@ class DashboardController extends AppController {
         $romaneios_gordo_vencimentos = $this->_verificaRomaneiosAtrasados($romaneios_gordo_vencimentos);
         $romaneios_invernar_vencimentos = $this->_verificaRomaneiosAtrasados($romaneios_invernar_vencimentos);
 
-        $this->set(compact('romaneios_gordo_vencimentos', 'romaneios_invernar_vencimentos'));
+        $this->set(compact('romaneios_gordo_vencimentos', 'romaneios_invernar_vencimentos'));*/
     }
 
     private function _verificaRomaneiosAtrasados($romaneios) {

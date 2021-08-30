@@ -50,7 +50,7 @@
 			<li class="nav-item start <?php echo (strtolower($this->params['controller']) == 'contaspagar') ? 'active open' : '' ?>">
 				<a href="<?php echo $this->Html->url(array('controller' => 'ContasPagar', 'action' => 'index')) ?>" class="nav-link nav-toggle">
 				<i class="fa fa-list"></i>
-					<span class="title">Contas à Pagar</span>
+					<span class="title">Despesas</span>
 					<span class="selected"></span>
 					<!-- <span class="arrow"></span> -->
 				</a>

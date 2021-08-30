@@ -29,7 +29,7 @@ class ContasController extends AppController {
             "",
             "PagamentoData.data_venc",
             "PagamentoData.data_pago",
-            "Empresa.nome",
+            "Fazenda.nome",
             "Pessoa.nome_fantasia",
             "PagamentoCategoria.categoria",
             "",
@@ -105,14 +105,14 @@ class ContasController extends AppController {
                 'PagamentoCategoria.*',
                 'PagamentoStatus.*',
                 'PagamentoForma.*',
-                'Empresa.nome',
+                'Fazenda.nome',
                 'Pessoa.nome_fantasia'
             ),
             'link' => array(
                 'PagamentoCategoria',
                 'PagamentoStatus',
                 'PagamentoForma',
-                'Empresa',
+                'Fazenda',
                 'Pessoa'
             ),
             'offset' => $iDisplayStart,
@@ -196,7 +196,7 @@ class ContasController extends AppController {
                     $radio,
                     $data_venc,
                     $data_pgto,
-                    $dado['Empresa']['nome'],
+                    $dado['Fazenda']['nome'],
                     $dado['Pessoa']['nome_fantasia'],
                     $categoria,
                     $nparcela . '/' . $nparcelas_total,
@@ -259,7 +259,7 @@ class ContasController extends AppController {
         $data_pago = null;
 
         if (empty($dados_request['PagamentoData']['empresa_id'])) {
-            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "A empresa não pode estar em branco!"))));
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "A fazenda não pode estar em branco!"))));
         }
         if (empty($dados_request['PagamentoData']['fornecedor_id'])) {
             return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "O fornecedor não pode estar em branco!"))));
@@ -368,7 +368,7 @@ class ContasController extends AppController {
         $dados_request = $this->request->data;
 
         if (empty($dados_request['PagamentoData']['empresa_id'])) {
-            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "A empresa não pode estar em branco!"))));
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "A fazenda não pode estar em branco!"))));
         }
         if (empty($dados_request['PagamentoData']['fornecedor_id'])) {
             return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "O fornecedor não pode estar em branco!"))));
