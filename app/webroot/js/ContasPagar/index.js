@@ -76,7 +76,6 @@ var Index = function () {
 		})
 	}
 	
-
 	var calclulaTotal = function() {
 
 		params = {};
@@ -601,6 +600,39 @@ var Index = function () {
 
 	}
 
+	var initPrint = function() {
+		$('a#imprimir_contas').click(function(ev){
+			ev.preventDefault();
+
+
+			params = {};
+
+			// get all typeable inputs
+			$('textarea.form-filter, select.form-filter, input.form-filter:not([type="radio"],[type="checkbox"])', $("#table-pagarpagamentos")).each(function() {
+				let name = $(this).attr("name");
+				let valor = $(this).val()
+				params[name] = valor;
+			});
+	
+			// get all checkboxes
+			$('input.form-filter[type="checkbox"]:checked', $("#table-pagarpagamentos")).each(function() {
+				let name = $(this).attr("name");
+				let valor = $(this).val()
+				params[name] = valor;
+			});
+	
+			// get all radio buttons
+			$('input.form-filter[type="radio"]:checked', $("#table-pagarpagamentos")).each(function() {
+				let name = $(this).attr("name");
+				let valor = $(this).val()
+				params[name] = valor;
+			});
+
+			let params_str = new URLSearchParams(params).toString();
+			window.open(baseUrl + 'Contas/imprimir/s/?' + params_str, '_blank').focus();
+		});
+	}
+
 	$('#modalDataPago').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget); // Button that triggered the modal
 		var recipient = button.data('whatever'); // Extract info from data-* attributes
@@ -627,6 +659,7 @@ var Index = function () {
 			initPickers();
 			initMasks();
 			handleValidationAlterar();
+			initPrint();
 			// initPago();
 			// handleSample();
 		}

@@ -37,50 +37,6 @@ class ContasPagarController extends ContasController {
         $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual'));
     }
 
-    public function imprimir() {
-        $this->layout = 'pdf';
-
-        $dados = $this->Session->read('contas_filtro');
-        if (!isset($dados)) {
-            echo "Por favor, realize o filtro na tela anterior e tente novamente.";
-            die();
-        }
-
-        unset($dados['offset']);
-        unset($dados['limit']);
-        unset($dados['order']);
-
-        $this->loadModel('PagamentoData');
-
-        $registros = $this->PagamentoData->find('all', array_merge($dados, [
-            'order' => ['Fazenda.nome', 'PagamentoData.data_pago', 'PagamentoData.data_venc']
-        ]));
-        foreach ($registros as $key => $registro) {
-            // descobrir quantas parcelas são
-            $nparcelas = $this->PagamentoData->find('count', [
-                'conditions' => [
-                    'PagamentoData.conta_id' => $registro['PagamentoData']['conta_id']
-                ]
-            ]);
-            $registros[$key]['PagamentoData']['_total_parcelas'] = $nparcelas;
-        }
-
-        $this->Mpdf->init();
-
-        // setting filename of output pdf file
-        $this->Mpdf->setFilename('file.pdf');
-
-        // setting output to I, D, F, S
-        $this->Mpdf->setOutput('I');
-        $this->Mpdf->SetFooter("Marilize - Romaneios");
-
-        // you can call any mPDF method via component, for example:
-        $this->Mpdf->SetWatermarkText("Draft");
-        
-     
-        $this->set(compact('registros'));
-    }
-
     public function adicionar() {
 
         $this->set('title_for_layout', 'Adicionar Contas à Pagar');

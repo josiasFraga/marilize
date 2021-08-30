@@ -186,9 +186,11 @@
 			</div>
 			<div class="actions">
 				<a role="button" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'ContasPagar', 'action' => 'adicionar')) ?>" class="btn btn-circle btn-success">
-					<i class="fa fa-plus"></i> Incluir Despesa</a>
-				<a role="button" target="_BLANK" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'ContasPagar', 'action' => 'imprimir')) ?>" class="btn btn-circle btn-default">
-					<i class="fa fa-print"></i> Imprimir</a>
+					<i class="fa fa-plus"></i> Incluir Despesa
+				</a>
+				<a role="button" data-toggle="" href="#" id="imprimir_contas" class="btn btn-circle btn-default">
+					<i class="fa fa-print"></i> Imprimir
+				</a>
 				<div class="btn-group">
 					<a class="btn red btn-outline btn-circle" href="javascript:;" data-toggle="dropdown">
 						<i class="fa fa-share"></i>
