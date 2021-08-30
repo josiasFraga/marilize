@@ -587,4 +587,449 @@ class ContasController extends AppController {
         }
     }
 
+    public function grupos() {
+
+
+        $this->set('title_for_layout', 'Grupos de Despesas/Receitas');
+
+        if ( $this->request->is('post') ){
+            $this->layout = "ajax";
+            return $this->dataTableGrupos();
+        }
+
+
+	}
+    
+    protected function dataTableGrupos() {
+
+        $this->layout = "ajax";
+
+        if ( !$this->request->is('post') || empty($this->request->data) ) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => 'Requisição inválida!' ))));
+        }
+
+        if ( isset($this->request->data['order']) ) $order = $this->request->data['order'];
+
+        $arr_columns_order = array(
+            "",
+            "ContaGrupo.nome",
+        );
+
+        $conditions = array();
+
+ 
+        $conditions = array_merge($conditions, array("ContaGrupo.ativo" => 'Y'));
+
+		if ( $this->dataTable->check_filtro("nome","text") === true)
+			$conditions = array_merge($conditions, array("ContaGrupo.nome LIKE" => "%".$this->request->data["nome"]."%"));
+
+        if ( isset($arr_columns_order[$order[0]['column']]) && isset($order[0]['dir']) && ($order[0]['dir'] == 'asc' || $order[0]['dir'] == 'desc')) {
+            $order = $arr_columns_order[$order[0]['column']]." ".$order[0]['dir'];
+        }
+
+
+        $this->loadModel('ContaGrupo');
+
+        $iTotalRecords = $this->ContaGrupo->find('count');
+
+        $iDisplayLength = intval($this->request->data['length']);
+        $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
+        $iDisplayStart = intval($this->request->data['start']);
+
+        $filtro_dados = array(
+            'conditions' => $conditions,
+            'order' => $order,
+            'fields' => array(
+                'ContaGrupo.*',
+            ),
+            'link' => array(),
+            'offset' => $iDisplayStart,
+            'limit' => $iDisplayLength
+        );
+        $dados = $this->ContaGrupo->find('all', $filtro_dados);
+
+
+        $registrosFiltrados = $this->ContaGrupo->find("count", array(
+            'conditions' => $conditions,
+            'link' => array(),
+        ));
+
+        // debug($dados); die();
+
+        $iRecordsFiltered = $registrosFiltrados;
+        $sEcho = intval($this->request->data['draw']);
+        $records = array();
+        $records["data"] = array();
+
+        $hoje = date('Y-m-d');
+
+        if ( count($dados) > 0 ) {
+
+            foreach ( $dados as $dado ) {
+
+                $radio = '<input type="checkbox" name="id[]" value="'.$dado['ContaGrupo']['id'].'">';
+                $nome = $dado['ContaGrupo']['nome'];
+                
+
+                $btn_alterar = '<a href="'.Router::url(array('controller' => $this->name, 'action' => 'alterar_grupo', $dado['ContaGrupo']['id'])).'" class="btn btn-icon-only green" data-toggle=""><i class="fa fa-pencil"></i></a>';
+
+                $btn_excluir = '<a href="#" class="btn btn-icon-only red btn-remove" data-id="'.$dado['ContaGrupo']['id'].'"><i class="fa fa-trash"></i></a>';
+
+                $actions = $btn_alterar.' '.$btn_excluir;
+
+                $records["data"][] = array(
+                    $radio,
+                    $nome,
+                    $actions
+                );
+            
+            }
+        }
+
+        $records["draw"] = $sEcho;
+        $records["recordsTotal"] = $iTotalRecords;
+        $records["recordsFiltered"] = $iRecordsFiltered;
+
+        return new CakeResponse(
+            array(
+                'type' => 'json',
+                'body' => json_encode($records)
+            )
+        );
+
+    }
+
+    public function adicionar_grupo() {
+
+        $this->set('title_for_layout', 'Adicionar Grupo');
+
+
+		if ( !empty($this->request->data) ) {
+
+			$this->layout = "ajax";
+			return $this->saveGrupo();
+		}
+	}
+
+	private function saveGrupo() {
+
+		$this->loadModel('ContaGrupo');
+
+		$this->ContaGrupo->set($this->request->data);
+
+		if ( $this->ContaGrupo->validates() ) {
+
+			$this->ContaGrupo->create();
+			if ( $this->ContaGrupo->save($this->request->data) ) 
+				return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'ok', 'msg' => "Cadastrado com sucesso!"))));
+			else{
+				return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'erro', 'msg' => "Ocorreu um erro inesperado ao tentar cadastrar o grupo. Por favor, tente novamente em alguns instantes."))));
+				//debug($this->Fazenda->getDataSource()->getLog(false, false));
+			}
+	
+			
+		} else {
+			return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'erro', 'msg' => $this->ContaGrupo->validationErrors[key($this->ContaGrupo->validationErrors)]))));
+		}
+	}
+
+	public function alterar_grupo( $id = null) {
+
+        $this->set('title_for_layout', 'Alterar Grupo');
+
+		if ( !empty($this->request->data) ) {
+
+			$this->layout = "ajax";
+			return $this->updateGrupo();
+		}
+		
+		//se não setou id do safra a ser alterado
+		if ( $id == null ) {
+			$this->redirect(array('controller' => 'Contas', 'action' => 'grupos'));
+		}
+
+		$this->loadModel("ContaGrupo");
+		$dados = $this->ContaGrupo->find('first',array(
+			'conditions' => array(
+				'ContaGrupo.id' => $id
+			),
+			'link' => []
+		));
+
+		$this->set('dados', $dados);
+
+	}
+
+	private function updateGrupo() {
+		$this->loadModel('ContaGrupo');
+
+		$this->ContaGrupo->id = $this->request->data['ContaGrupo']['id'];
+		$this->ContaGrupo->set($this->request->data);
+		if ( $this->ContaGrupo->validates() ) {
+			if ( $this->ContaGrupo->save() )
+				return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'ok', 'msg' => "Dados atualizados com sucesso!"))));
+			else
+				return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'erro', 'msg' => "Ocorreu um erro ao atualizar os dados do grupo!"))));
+		} else {
+			return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'erro', 'msg' => $this->ContaGrupo->validationErrors[key($this->ContaGrupo->validationErrors)]))));
+		}
+	}
+
+    public function excluir_grupo( $id = null ) {
+        $this->layout = 'ajax';
+
+        if ( is_null($id) || !is_numeric($id) ) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( "status" => "warning", "msg" => "Item não encontrado." ))));
+        }
+
+        $this->loadModel('ContaGrupo');
+        $dados = $this->ContaGrupo->findById($id);
+
+        if ( count($dados) == 0 ) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( "status" => "erro", "msg" => "O grupo que você está tentando excluir não existe."))));
+        }
+
+        $dados['ContaGrupo']['ativo'] = 'N';
+		
+		if ( $this->ContaGrupo->save($dados) )
+			return new CakeResponse(array('type' => 'json', 'body' => json_encode(array("status" => "ok", "msg" => "Grupo excluído com sucesso."))));
+		else
+			return new CakeResponse(array('type' => 'json', 'body' => json_encode(array("status" => "erro", "msg" => "Ocorreu um erro ao excluir o grupo. Por favor, tente mais tarde."))));
+
+
+
+    }
+
+    public function subgrupos() {
+
+
+        $this->set('title_for_layout', 'Subgrupos de Despesas/Receitas');
+
+        if ( $this->request->is('post') ){
+            $this->layout = "ajax";
+            return $this->dataTableSubgrupos();
+        }
+
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
+        $this->set(compact('grupos'));
+
+
+	}
+    
+    protected function dataTableSubgrupos() {
+
+        $this->layout = "ajax";
+
+        if ( !$this->request->is('post') || empty($this->request->data) ) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => 'Requisição inválida!' ))));
+        }
+
+        if ( isset($this->request->data['order']) ) $order = $this->request->data['order'];
+
+        $arr_columns_order = array(
+            "",
+            "ContaGrupo.nome",
+            "ContaSubgrupo.nome",
+        );
+
+        $conditions = array();
+
+
+        $conditions = array_merge($conditions, array("ContaSubgrupo.ativo" => 'Y'));
+
+		if ( $this->dataTable->check_filtro("grupo_id","text") === true)
+			$conditions = array_merge($conditions, array("ContaSubgrupo.grupo_id LIKE" => $this->request->data["grupo_id"]));
+
+		if ( $this->dataTable->check_filtro("nome","text") === true)
+			$conditions = array_merge($conditions, array("ContaSubgrupo.nome LIKE" => "%".$this->request->data["nome"]."%"));
+
+        if ( isset($arr_columns_order[$order[0]['column']]) && isset($order[0]['dir']) && ($order[0]['dir'] == 'asc' || $order[0]['dir'] == 'desc')) {
+            $order = $arr_columns_order[$order[0]['column']]." ".$order[0]['dir'];
+        }
+
+
+        $this->loadModel('ContaSubgrupo');
+
+        $iTotalRecords = $this->ContaSubgrupo->find('count');
+
+        $iDisplayLength = intval($this->request->data['length']);
+        $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
+        $iDisplayStart = intval($this->request->data['start']);
+
+        $filtro_dados = array(
+            'conditions' => $conditions,
+            'order' => $order,
+            'fields' => array(
+                'ContaSubgrupo.*',
+                'ContaGrupo.*',
+            ),
+            'link' => array('ContaGrupo'),
+            'offset' => $iDisplayStart,
+            'limit' => $iDisplayLength
+        );
+        $dados = $this->ContaSubgrupo->find('all', $filtro_dados);
+
+
+        $registrosFiltrados = $this->ContaSubgrupo->find("count", array(
+            'conditions' => $conditions,
+            'link' => array('ContaGrupo'),
+        ));
+
+        // debug($dados); die();
+
+        $iRecordsFiltered = $registrosFiltrados;
+        $sEcho = intval($this->request->data['draw']);
+        $records = array();
+        $records["data"] = array();
+
+        $hoje = date('Y-m-d');
+
+        if ( count($dados) > 0 ) {
+
+            foreach ( $dados as $dado ) {
+
+                $radio = '<input type="checkbox" name="id[]" value="'.$dado['ContaSubgrupo']['id'].'">';
+                $grupo = $dado['ContaGrupo']['nome'];
+                $nome = $dado['ContaSubgrupo']['nome'];
+                
+
+                $btn_alterar = '<a href="'.Router::url(array('controller' => $this->name, 'action' => 'alterar_subgrupo', $dado['ContaSubgrupo']['id'])).'" class="btn btn-icon-only green" data-toggle=""><i class="fa fa-pencil"></i></a>';
+
+                $btn_excluir = '<a href="#" class="btn btn-icon-only red btn-remove" data-id="'.$dado['ContaSubgrupo']['id'].'"><i class="fa fa-trash"></i></a>';
+
+                $actions = $btn_alterar.' '.$btn_excluir;
+
+                $records["data"][] = array(
+                    $radio,
+                    $grupo,
+                    $nome,
+                    $actions
+                );
+            
+            }
+        }
+
+        $records["draw"] = $sEcho;
+        $records["recordsTotal"] = $iTotalRecords;
+        $records["recordsFiltered"] = $iRecordsFiltered;
+
+        return new CakeResponse(
+            array(
+                'type' => 'json',
+                'body' => json_encode($records)
+            )
+        );
+
+    }
+
+    public function adicionar_subgrupo() {
+
+        $this->set('title_for_layout', 'Adicionar Subgrupo');
+
+
+		if ( !empty($this->request->data) ) {
+
+			$this->layout = "ajax";
+			return $this->saveSubgrupo();
+		}
+
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
+        $this->set(compact('grupos'));
+	}
+
+	private function saveSubgrupo() {
+
+		$this->loadModel('ContaSubgrupo');
+
+		$this->ContaSubgrupo->set($this->request->data);
+
+		if ( $this->ContaSubgrupo->validates() ) {
+
+			$this->ContaSubgrupo->create();
+			if ( $this->ContaSubgrupo->save($this->request->data) ) 
+				return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'ok', 'msg' => "Cadastrado com sucesso!"))));
+			else{
+				return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'erro', 'msg' => "Ocorreu um erro inesperado ao tentar cadastrar o subgrupo. Por favor, tente novamente em alguns instantes."))));
+				//debug($this->Fazenda->getDataSource()->getLog(false, false));
+			}
+	
+			
+		} else {
+			return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'erro', 'msg' => $this->ContaSubgrupo->validationErrors[key($this->ContaSubgrupo->validationErrors)]))));
+		}
+	}
+
+	public function alterar_subgrupo( $id = null) {
+
+        $this->set('title_for_layout', 'Alterar Subgrupo');
+
+		if ( !empty($this->request->data) ) {
+
+			$this->layout = "ajax";
+			return $this->updateSubgrupo();
+		}
+		
+		//se não setou id do safra a ser alterado
+		if ( $id == null ) {
+			$this->redirect(array('controller' => 'Contas', 'action' => 'subgrupos'));
+		}
+
+		$this->loadModel("ContaSubgrupo");
+		$dados = $this->ContaSubgrupo->find('first',array(
+			'conditions' => array(
+				'ContaSubgrupo.id' => $id
+			),
+			'link' => []
+		));
+
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
+        $this->set(compact('grupos'));
+
+		$this->set('dados', $dados);
+
+	}
+
+	private function updateSubgrupo() {
+		$this->loadModel('ContaSubgrupo');
+
+		$this->ContaSubgrupo->id = $this->request->data['ContaSubgrupo']['id'];
+		$this->ContaSubgrupo->set($this->request->data);
+		if ( $this->ContaSubgrupo->validates() ) {
+			if ( $this->ContaSubgrupo->save() )
+				return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'ok', 'msg' => "Dados atualizados com sucesso!"))));
+			else
+				return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'erro', 'msg' => "Ocorreu um erro ao atualizar os dados do subgrupo!"))));
+		} else {
+			return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'erro', 'msg' => $this->ContaSubgrupo->validationErrors[key($this->ContaSubgrupo->validationErrors)]))));
+		}
+	}
+
+    public function excluir_subgrupo( $id = null ) {
+        $this->layout = 'ajax';
+
+        if ( is_null($id) || !is_numeric($id) ) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( "status" => "warning", "msg" => "Item não encontrado." ))));
+        }
+
+        $this->loadModel('ContaSubgrupo');
+        $dados = $this->ContaSubgrupo->findById($id);
+
+        if ( count($dados) == 0 ) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( "status" => "erro", "msg" => "O subgrupo que você está tentando excluir não existe."))));
+        }
+
+        $dados['ContaSubgrupo']['ativo'] = 'N';
+		
+		if ( $this->ContaSubgrupo->save($dados) )
+			return new CakeResponse(array('type' => 'json', 'body' => json_encode(array("status" => "ok", "msg" => "Subgrupo excluído com sucesso."))));
+		else
+			return new CakeResponse(array('type' => 'json', 'body' => json_encode(array("status" => "erro", "msg" => "Ocorreu um erro ao excluir o grupo. Por favor, tente mais tarde."))));
+
+
+
+    }
+
 }

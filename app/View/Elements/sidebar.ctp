@@ -21,7 +21,7 @@
 				</a>
 			</li>
 
-			<li class="<?php echo (in_array(strtolower($this->params['controller']), array('pessoas', 'fazendas', 'safras', 'filiais', 'centrocustos', 'documentos'))) ? 'active open' : ''; ?>">
+			<li class="<?php echo (in_array(strtolower($this->params['controller']), array('pessoas', 'fazendas', 'safras', 'filiais', 'centrocustos', 'documentos', 'Conta', 'contas'))) ? 'active open' : ''; ?>">
 
 				<a href="javascript:;">
 					<i class="fa fa-database"></i>
@@ -42,7 +42,17 @@
 					<li class="<?php echo ((strtolower($this->params['controller']) == "pessoas")) ? 'active' : ''; ?>">
 						<a href="<?php echo $this->Html->url(array('controller' => 'Pessoas', 'action' => 'index')) ?>">
 						Pessoas</a>
-					</li>	
+					</li>
+
+					<li class="<?php echo ((strtolower($this->params['controller']) == "contas") && (strtolower($this->params['action']) == "grupos")) ? 'active' : ''; ?>">
+						<a href="<?php echo $this->Html->url(array('controller' => 'Contas', 'action' => 'grupos')) ?>">
+						Grupos de Despesas/Receitas</a>
+					</li>
+
+					<li class="<?php echo ((strtolower($this->params['controller']) == "contas") && (strtolower($this->params['action']) == "subgrupos")) ? 'active' : ''; ?>">
+						<a href="<?php echo $this->Html->url(array('controller' => 'Contas', 'action' => 'subgrupos')) ?>">
+						Subgrupos de Despesas/Receitas</a>
+					</li>
 				</ul>
 
 			</li>
