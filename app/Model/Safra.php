@@ -11,6 +11,12 @@ class Safra extends AppModel {
 		)*/
 	);
 
+	public $hasMany = array(
+		'PagamentoData' => array(
+			'foreignKey' => 'safra_id'
+		)
+	);
+
 	public $validate = array(
 		'nome' => array(
 		 	'rule1' => array(

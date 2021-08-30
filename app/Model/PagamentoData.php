@@ -25,6 +25,9 @@ class PagamentoData extends AppModel {
         ],
         'ContaSubgrupo' => [
             'foreignKey' => 'subgrupo_id'
+        ],
+        'Safra' => [
+            'foreignKey' => 'safra_id'
         ]
     ];
 

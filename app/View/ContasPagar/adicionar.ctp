@@ -64,13 +64,27 @@
                 <div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
-							<label class="control-label">Empresa: <span class="required">*</span></label>
+							<label class="control-label">Safra: <span class="required">*</span></label>
 							<div class="">
 								<!--<i class="fa"></i>-->
-								<select class="form-control select2" name="data[PagamentoData][empresa_id]">
+								<select class="form-control select2 required" name="data[PagamentoData][safra_id]">
 									<option value="">Selecione ...</option>
-								<?php foreach ($empresas as $key => $empresa) { ?>
-                                    <option value="<?=$key?>"><?=$empresa?></option>
+								<?php foreach ($safras as $key => $safra) { ?>
+                                    <option value="<?=$key?>"><?=$safra?></option>
+                                <?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="control-label">Fazenda: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2 required" name="data[PagamentoData][fazenda_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($fazendas as $key => $fazenda) { ?>
+                                    <option value="<?=$key?>"><?=$fazenda?></option>
                                 <?php } ?>
 								</select>
 							</div>

@@ -27,6 +27,7 @@ class ContasController extends AppController {
 
         $arr_columns_order = array(
             "",
+            "Safra.nome",
             "PagamentoData.data_venc",
             "PagamentoData.data_pago",
             "Fazenda.nome",
@@ -44,6 +45,10 @@ class ContasController extends AppController {
             $conditions = array_merge($conditions, array("PagamentoData.tipo" => $tipo));
         }
         $conditions = array_merge($conditions, array("PagamentoData.ativo" => 'Y'));
+
+        if (isset($this->request->data['safra_id']) && !empty($this->request->data['safra_id'])) {
+            $conditions = array_merge($conditions, array("PagamentoData.safra_id" => $this->request->data["safra_id"]));
+        }
 
         if (!isset($this->request->data['data_venc']) && !isset($this->request->data['data_venc_ate'])) {
             $conditions = array_merge($conditions, array("PagamentoData.data_venc BETWEEN ? AND ?" => [date('Y-m-01'), date('Y-m-t')]));
@@ -69,8 +74,8 @@ class ContasController extends AppController {
             $conditions = array_merge($conditions, array("PagamentoData.data_pago <=" => $this->request->data['data_pgto_ate']));
         }
 
-        if ( $this->dataTable->check_filtro("empresa_id", "numeric") === true){
-            $conditions = array_merge($conditions, array("PagamentoData.empresa_id" => $this->request->data["empresa_id"]));
+        if ( $this->dataTable->check_filtro("fazenda_id", "numeric") === true){
+            $conditions = array_merge($conditions, array("PagamentoData.fazenda_id" => $this->request->data["fazenda_id"]));
         }
 
         if ( $this->dataTable->check_filtro("fornecedor_id", "numeric") === true){
@@ -89,6 +94,7 @@ class ContasController extends AppController {
             $order = $arr_columns_order[$order[0]['column']]." ".$order[0]['dir'];
         }
 
+
         $this->loadModel('PagamentoData');
 
         $iTotalRecords = $this->PagamentoData->find('count');
@@ -106,6 +112,7 @@ class ContasController extends AppController {
                 'PagamentoStatus.*',
                 'PagamentoForma.*',
                 'Fazenda.nome',
+                'Safra.nome',
                 'Pessoa.nome_fantasia'
             ),
             'link' => array(
@@ -113,7 +120,8 @@ class ContasController extends AppController {
                 'PagamentoStatus',
                 'PagamentoForma',
                 'Fazenda',
-                'Pessoa'
+                'Pessoa',
+                'Safra'
             ),
             'offset' => $iDisplayStart,
             'limit' => $iDisplayLength
@@ -126,7 +134,8 @@ class ContasController extends AppController {
             'link' => array(
                 'PagamentoCategoria',
                 'PagamentoStatus',
-                'PagamentoForma'
+                'PagamentoForma',
+                'Safra'
             ),
         ));
 
@@ -144,7 +153,7 @@ class ContasController extends AppController {
             foreach ( $dados as $dado ) {
 
                 $radio = '<input type="checkbox" name="id[]" value="'.$dado['PagamentoData']['id'].'">';
-
+                $safra = $dado['Safra']['nome'];
                 $data_venc = date('d/m/Y', strtotime($dado['PagamentoData']['data_venc']));
                 if (!is_null($dado['PagamentoData']['data_pago'])) {
                     $data_pgto = date('d/m/Y', strtotime($dado['PagamentoData']['data_pago']));
@@ -194,6 +203,7 @@ class ContasController extends AppController {
 
                 $records["data"][] = array(
                     $radio,
+                    $safra,
                     $data_venc,
                     $data_pgto,
                     $dado['Fazenda']['nome'],
@@ -258,7 +268,7 @@ class ContasController extends AppController {
         }
         $data_pago = null;
 
-        if (empty($dados_request['PagamentoData']['empresa_id'])) {
+        if (empty($dados_request['PagamentoData']['fazenda_id'])) {
             return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "A fazenda não pode estar em branco!"))));
         }
         if (empty($dados_request['PagamentoData']['fornecedor_id'])) {
@@ -283,8 +293,11 @@ class ContasController extends AppController {
         $valor = $dados_request['PagamentoData']['valor'];
         $observacoes = $dados_request['PagamentoData']['observacoes'];
         $fornecedor_id = $dados_request['PagamentoData']['fornecedor_id'];
-        $empresa_id = $dados_request['PagamentoData']['empresa_id'];
+        $fazenda_id = $dados_request['PagamentoData']['fazenda_id'];
         $ndocumento = $dados_request['PagamentoData']['ndocumento'];
+        $safra_id = $dados_request['PagamentoData']['safra_id'];
+        $grupo_id = $dados_request['PagamentoData']['grupo_id'];
+        $subgrupo_id = $dados_request['PagamentoData']['subgrupo_id'];
         $conta_id = md5(time().uniqid());
         
         $dados_salvar = array();
@@ -310,9 +323,12 @@ class ContasController extends AppController {
                 $dados_salvar[$key]['PagamentoData']['tipo'] = $tipo;
                 $dados_salvar[$key]['PagamentoData']['observacoes'] = $observacoes;
                 $dados_salvar[$key]['PagamentoData']['conta_id'] = $conta_id;
-                $dados_salvar[$key]['PagamentoData']['empresa_id'] = $empresa_id;
+                $dados_salvar[$key]['PagamentoData']['fazenda_id'] = $fazenda_id;
                 $dados_salvar[$key]['PagamentoData']['fornecedor_id'] = $fornecedor_id;
                 $dados_salvar[$key]['PagamentoData']['ndocumento'] = $ndocumento;
+                $dados_salvar[$key]['PagamentoData']['safra_id'] = $safra_id;
+                $dados_salvar[$key]['PagamentoData']['grupo_id'] = $grupo_id;
+                $dados_salvar[$key]['PagamentoData']['subgrupo_id'] = $subgrupo_id;
                 $key++;
                 
             }
@@ -327,9 +343,12 @@ class ContasController extends AppController {
             $dados_salvar[0]['PagamentoData']['tipo'] = $tipo;
             $dados_salvar[0]['PagamentoData']['observacoes'] = $observacoes;
             $dados_salvar[0]['PagamentoData']['conta_id'] = $conta_id;
-            $dados_salvar[0]['PagamentoData']['empresa_id'] = $empresa_id;
+            $dados_salvar[0]['PagamentoData']['fazenda_id'] = $fazenda_id;
             $dados_salvar[0]['PagamentoData']['fornecedor_id'] = $fornecedor_id;
             $dados_salvar[0]['PagamentoData']['ndocumento'] = $ndocumento;
+            $dados_salvar[0]['PagamentoData']['safra_id'] = $safra_id;
+            $dados_salvar[0]['PagamentoData']['grupo_id'] = $grupo_id;
+            $dados_salvar[0]['PagamentoData']['subgrupo_id'] = $subgrupo_id;
         }
 
         // die(debug($dados_salvar));
@@ -367,7 +386,7 @@ class ContasController extends AppController {
 
         $dados_request = $this->request->data;
 
-        if (empty($dados_request['PagamentoData']['empresa_id'])) {
+        if (empty($dados_request['PagamentoData']['fazenda_id'])) {
             return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "A fazenda não pode estar em branco!"))));
         }
         if (empty($dados_request['PagamentoData']['fornecedor_id'])) {
@@ -431,7 +450,7 @@ class ContasController extends AppController {
                 'PagamentoForma.*'
             ),
             'link' => array(
-                'PagamentoForma'
+                'PagamentoForma',
             )
         ));
 		$this->set(compact('dados'));

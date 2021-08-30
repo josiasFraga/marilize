@@ -50,7 +50,7 @@ class ContaSubgrupo extends AppModel {
                 'ContaSubgrupo.id',
                 'ContaSubgrupo.nome'
             ),
-            'conditons' => [
+            'conditions' => [
                 'ContaSubgrupo.ativo' => 'Y',
                 'ContaSubgrupo.grupo_id' => $grupo_id,
             ],

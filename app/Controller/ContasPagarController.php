@@ -82,7 +82,6 @@ class ContasPagarController extends ContasController {
         $this->set(compact('registros'));
     }
 
-
     public function adicionar() {
 
         $this->set('title_for_layout', 'Adicionar Contas à Pagar');
@@ -102,16 +101,22 @@ class ContasPagarController extends ContasController {
         $listformas = $this->PagamentoForma->listaPagamentoForma();
 
         $this->loadModel('Fazenda');
-        $empresas = $this->Fazenda->listaFazendas();
+        $fazendas = $this->Fazenda->listaFazendas();
 
         $this->loadModel('Pessoa');
         $fornecedores = $this->Pessoa->findListAllPessoas(2);
 
         $this->loadModel('ContaGrupo');
         $grupos = $this->ContaGrupo->listaGrupos();
+    
+        $this->loadModel('Safra');
+        $safras = $this->Safra->listaSafras();
 
 
-        $this->set(compact('status', 'categorias', 'listformas', 'empresas', 'fornecedores', 'grupos'));
+        $safra_atual = $this->Safra->buscaSafraAtual();
+
+
+        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'grupos', 'safras', 'safra_atual'));
     }
     
     public function alterar($id = null) {
@@ -152,6 +157,16 @@ class ContasPagarController extends ContasController {
         $fornecedores = $this->Pessoa->findListAllPessoas(2);
 
         $this->set(compact('dados', 'categorias', 'listformas', 'empresas', 'fornecedores'));
+    }
+
+    public function subgrupos_dependents($grupo_id = null) {
+        if($grupo_id == null) {
+            return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'ok', 'dados' => []))));
+        }
+
+        $this->loadModel('ContaSubgrupo');
+        $dados = $this->ContaSubgrupo->listaSubgrupos($grupo_id);
+        return new CakeResponse(array('type' => 'json', 'body' => json_encode(array('status' => 'ok', 'dados' => $dados))));
     }
 
 }

@@ -120,6 +120,7 @@ var Index = function () {
 				{ 'bSortable' : false, "sClass": "text-center" },
 				{ "sClass": "text-center" },
 				{ "sClass": "text-center" },
+				{ "sClass": "text-center" },
 				{  },
 				{  },
 				{  },

@@ -331,7 +331,7 @@ var Adicionar = function () {
 	            message: 'Carregando subgrupos, aguarde...'
 	        });
 
-	        $.getJSON(baseUrl+'ContasPagar/subgrupos_dependents', { grupo_id : grupo_id }, function(data){
+	        $.getJSON(baseUrl+'ContasPagar/subgrupos_dependents/'+grupo_id, {}, function(data){
                 var dados = data.dados;
                 if ( dados.length == 0 ) {
                     $('#subgrupo_id').html('<option value="">nenhum subgrupo encontrado!</option>');
@@ -341,7 +341,7 @@ var Adicionar = function () {
                 
 
 	        	$.each(dados,function(index, val){
-	        		$('#subgrupo_id').append('<option value="'+val.id+'">'+val.nome+'</option>');
+	        		$('#subgrupo_id').append('<option value="'+index+'">'+val+'</option>');
 	        	});
 
 	        	App.unblockUI('form#adicionar-contap');
