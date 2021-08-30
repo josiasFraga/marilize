@@ -22,7 +22,19 @@ class ContasReceberController extends ContasController {
         $this->loadModel('PagamentoForma');
         $listformas = $this->PagamentoForma->listaPagamentoForma();
 
-        $this->set(compact('status', 'categorias', 'listformas'));
+        $this->loadModel('Fazenda');
+        $fazendas = $this->Fazenda->listaFazendas();
+
+        $this->loadModel('Pessoa');
+        $fornecedores = $this->Pessoa->findListAllPessoas(1);
+    
+        $this->loadModel('Safra');
+        $safras = $this->Safra->listaSafras();
+
+        $safra_atual = $this->Safra->buscaSafraAtual();
+
+
+        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual'));
     }
 
     public function adicionar() {
@@ -43,7 +55,23 @@ class ContasReceberController extends ContasController {
         $this->loadModel('PagamentoForma');
         $listformas = $this->PagamentoForma->listaPagamentoForma();
 
-        $this->set(compact('status', 'categorias', 'listformas'));
+        $this->loadModel('Fazenda');
+        $fazendas = $this->Fazenda->listaFazendas();
+
+        $this->loadModel('Pessoa');
+        $fornecedores = $this->Pessoa->findListAllPessoas(2);
+
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
+    
+        $this->loadModel('Safra');
+        $safras = $this->Safra->listaSafras();
+
+
+        $safra_atual = $this->Safra->buscaSafraAtual();
+
+
+        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'grupos', 'safras', 'safra_atual'));
     }
     
     public function alterar($id = null) {
@@ -67,7 +95,7 @@ class ContasReceberController extends ContasController {
         $dados = $this->PagamentoData->findById($id);
 
         if (count($dados) <= 0) {
-            $this->Session->setFlash('Conta à Receber Incorreta!!!', 'flash_error');
+            $this->Session->setFlash('Receita Incorreta!!!', 'flash_error');
             return $this->routing();
         }
 
@@ -77,7 +105,27 @@ class ContasReceberController extends ContasController {
         $this->loadModel('PagamentoForma');
         $listformas = $this->PagamentoForma->listaPagamentoForma();
 
-        $this->set(compact('dados', 'categorias', 'listformas'));
+        $this->loadModel('Fazenda');
+        $fazendas = $this->Fazenda->listaFazendas();
+
+        $this->loadModel('Pessoa');
+        $fornecedores = $this->Pessoa->findListAllPessoas(2);
+
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
+
+        if ( $dados['PagamentoData']['grupo_id'] != '' ) {
+            $this->loadModel('ContaSubgrupo');
+            $subgrupos = $this->ContaSubgrupo->listaSubgrupos($dados['PagamentoData']['grupo_id']);
+
+        }
+    
+        $this->loadModel('Safra');
+        $safras = $this->Safra->listaSafras();
+
+        $safra_atual = $this->Safra->buscaSafraAtual();
+
+        $this->set(compact('dados', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual', 'grupos', 'subgrupos'));
     }
 
 }

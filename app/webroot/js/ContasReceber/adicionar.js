@@ -1,4 +1,177 @@
 var Adicionar = function () {
+    var handleParcelas = function() {
+        //$('#parcelas').modal('toggle');
+        $('#alterar_parcelas').click(function() {
+            $('#parcelas').modal('toggle');
+        });
+
+        var possuiParcelas = function() {
+            parcelas = $('input[name="data[nparcelas]"]').val();
+            if (parcelas == '' || parcelas == '1') {
+                return false;
+            }
+            
+            return true;
+        }
+        
+        $('.date-picker-vencimento').datepicker({
+            rtl: App.isRTL(),
+            autoclose: true,
+			format: 'dd/mm/yyyy',
+            language: 'pt-BR',
+            todayHighlight: true
+        }).on('changeDate', function() {
+            if (possuiParcelas()) {
+                mostrarParcelas();
+                alert("As parcelas foram geradas novamente!");
+            }
+        });
+
+        $('input[name="data[nparcelas]"]').change(function() {
+            parcelas = $(this).val();
+            $('#parcelas .modal-body').html("");
+
+            if (!possuiParcelas()) {
+                $('#alterar_parcelas').attr('disabled', 'disabled');
+            } else {
+                var data_vencimento = $('input[name="data[PagamentoData][data_venc]"]').val();
+                var valor_total = $('input[name="data[PagamentoData][valor]"]').val();
+                if (data_vencimento == '' || valor_total == '') {
+                    $(this).val("1");
+                    alert("Digite a data de vencimento e o valor!");
+                    return false;
+                }
+
+                $('#alterar_parcelas').removeAttr('disabled');
+                mostrarParcelas();
+            }
+        });
+
+        $('input[name="data[PagamentoData][valor]"]').change(function() {
+            if (possuiParcelas()) {
+                mostrarParcelas();
+                alert("As parcelas foram geradas novamente!");
+            }
+        });
+
+        $('#parcelas .modal-body').on('click', '.gerar-proximas-parcelas', function() {
+            // esta função pega a data da linha do botão que foi clicado
+            // e todas próximas datas são geradas a partir dela.
+
+            var primeira_data = $(this).closest('div.parcela-dados').find('input.data-parcela').val();
+
+            $.each($(this).closest('div.parcela-dados').nextAll('div.parcela-dados'), function(key, val) {
+                var data_parcela = moment(primeira_data, "DD/MM/YYYY").add((key+1), 'M').format("DD/MM/YYYY");
+
+                $(val).find('input.data-parcela').val(data_parcela);
+
+            });
+        });
+        
+        var mostrarParcelas = function() {
+            var nparcelas = parseInt($('input[name="data[nparcelas]"]').val());
+            var parcelas = [];
+            // @todo; salvar
+            // @todo; não permitir salvar se valor das parcelas não fechar com valor total
+            // @todo; modal p/ revisar antes de salvar
+            var data_venc = $('input[name="data[PagamentoData][data_venc]"]').val();
+
+            var valor_total = stringToFloat($('input[name="data[PagamentoData][valor]"]').val());
+            var valor_parcela = (Math.floor((valor_total / nparcelas) * 100) / 100);
+
+            var diferenca_parcela_total = valor_total - (valor_parcela * nparcelas);
+            if (diferenca_parcela_total > 0) {
+                valor_primeira_parcela = valor_parcela + diferenca_parcela_total;
+            } else {
+                valor_primeira_parcela = valor_parcela;
+            }
+
+            for (i = 0; i < nparcelas; i++) {
+                var data_parcela = moment(data_venc, "DD/MM/YYYY").add(i, 'M').format("DD/MM/YYYY");
+
+                if (i == 0) {
+                    parcelas.push({data: data_parcela,valor: number_format(valor_primeira_parcela, 2, ',', '.')})
+                } else {
+                    parcelas.push({data: data_parcela,valor: number_format(valor_parcela, 2, ',', '.')})
+
+                }
+            }
+            $('#parcelas .modal-body').html("");
+
+            $.each(parcelas, function(key, val) {
+                if (key > 0) {
+                    var structure_parcela = [
+                        '<div class="parcela-dados">',
+                            '<div class="form-group col-md-5">',
+                                '<label class="control-label">['+(key+1)+'] Data: <span class="required">*</span></label>',
+                                '<div class="input-group date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">',
+                                    '<input type="text" class="form-control data-parcela" name="data[parcelas]['+key+'][data]" value="'+val.data+'" readonly />',
+                                    '<span class="input-group-btn"><button class="btn default" type="button"><i class="fa fa-calendar"></i></button></span>',
+                                '</div>',
+                            '</div>',
+                            '<div class="form-group col-md-5">',
+                                '<label class="control-label">Valor: <span class="required">*</span></label>',
+                                '<input class="form-control moeda valor-parcela" name="data[parcelas]['+key+'][valor]" value="'+val.valor+'" />',
+                            '</div>',
+                            '<div class="col-md-2" style="padding-left: 0px">',
+                                '<button type="button" class="btn green gerar-proximas-parcelas" title="Gerar próximas parcelas a partir desta data" style="margin-top: 25px"><i class="fa fa-refresh"></i></button>',
+                            '</div>',
+                            '<div class="clearfix"></div>',
+                        '</div>',
+                    ];
+                } else {
+                    var structure_parcela = [
+                        '<div class="parcela-dados">',
+                            '<div class="form-group col-md-5">',
+                                '<label class="control-label">['+(key+1)+'] Data: <span class="required">*</span></label>',
+                                '<input type="text" class="form-control" readonly name="data[parcelas]['+key+'][data]" value="'+val.data+'" />',
+                            '</div>',
+                            '<div class="form-group col-md-5">',
+                                '<label class="control-label">Valor: <span class="required">*</span></label>',
+                                '<input class="form-control moeda valor-parcela" name="data[parcelas]['+key+'][valor]" value="'+val.valor+'" />',
+                            '</div>',
+                            '<div class="col-md-2" style="padding-left: 0px">',
+                                '<button type="button" class="btn green gerar-proximas-parcelas" title="Gerar próximas parcelas a partir desta data" style="margin-top: 25px"><i class="fa fa-refresh"></i></button>',
+                            '</div>',
+                            '<div class="clearfix"></div>',
+                        '</div>',
+                    ];
+                }
+                
+                $(structure_parcela.join('')).appendTo($('#parcelas .modal-body'));
+                initPickers();
+                initMasks();
+            });
+        }
+    }
+
+    var stringToFloat = function(value) {
+        return parseFloat(value.replace(".", "").replace(",", "."));
+    }
+
+    var number_format = function (number, decimals, dec_point, thousands_sep) {
+        // Strip all characters but numerical ones.
+        number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+        var n = !isFinite(+number) ? 0 : +number,
+            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+            s = '',
+            toFixedFix = function (n, prec) {
+                var k = Math.pow(10, prec);
+                return '' + Math.round(n * k) / k;
+            };
+        // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+        if (s[0].length > 3) {
+            s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+        }
+        if ((s[1] || '').length < prec) {
+            s[1] = s[1] || '';
+            s[1] += new Array(prec - s[1].length + 1).join('0');
+        }
+        return s.join(dec);
+    }
 
     // validation using icons
     var handleValidation = function() {
@@ -48,6 +221,20 @@ var Adicionar = function () {
             // },
 
             submitHandler: function (form) {
+                var nparcelas = $('input[name="data[nparcelas]"]').val();
+                var valor_total = stringToFloat($('input[name="data[PagamentoData][valor]"]').val());
+
+                if (nparcelas != '' && nparcelas > 1) {
+                    var total_parcelas = 0;
+                    $.each($('#parcelas .modal-body').find('.valor-parcela'), function(key, val) {
+                        total_parcelas += stringToFloat($(val).val());
+                    });
+
+                    if (total_parcelas.toFixed(2) !== valor_total.toFixed(2)) {
+                        alert("Os valores das parcelas não são iguais ao valor total!");
+                        return;
+                    }
+                }
                 
                 var formdata = new FormData(form);
                 $("form#adicionar-contar button[type=submit]").html('<i class="fa fa-spinner fa-spin"></i> Cadastrando, aguarde...').attr('disabled',true);
@@ -66,7 +253,8 @@ var Adicionar = function () {
                         error.hide();
                         warning.hide();
                         $('#outra_conta').show();
-                        // form.reset();
+                        form.reset();                        
+                        $('#parcelas .modal-body').html("");
                     }else if(data.status == "warning"){
                         $("form#adicionar-contar .alert-warning span.message").html(data.msg);
                         warning.show();
@@ -127,6 +315,40 @@ var Adicionar = function () {
         }
     });
 
+    var initDependents = function (){
+
+        $('select#grupo_id').change(function(){
+    
+            var grupo_id = $(this).val();
+            $('#subgrupo_id').html('<option value="">carregando...</option>');
+    
+            App.blockUI({
+	            target: 'form#adicionar-contap',
+	            boxed: true,
+	            message: 'Carregando subgrupos, aguarde...'
+	        });
+
+	        $.getJSON(baseUrl+'ContasPagar/subgrupos_dependents/'+grupo_id, {}, function(data){
+                var dados = data.dados;
+                if ( dados.length == 0 ) {
+                    $('#subgrupo_id').html('<option value="">nenhum subgrupo encontrado!</option>');
+                } else {
+                    $('#subgrupo_id').html('<option value="">[Subgrupo]</option>');                    
+                }
+                
+
+	        	$.each(dados,function(index, val){
+	        		$('#subgrupo_id').append('<option value="'+index+'">'+val+'</option>');
+	        	});
+
+	        	App.unblockUI('form#adicionar-contap');
+
+	        	$('#subgrupo_id').select2();
+
+	        });
+        });
+    }
+
     return {
 
         //main function to initiate the module
@@ -135,6 +357,8 @@ var Adicionar = function () {
             initMisc();
             initMasks();
             initPickers();
+            initDependents();
+            handleParcelas();
         }
 
     };

@@ -10,7 +10,7 @@
 		<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
 		<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 		<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-		<ul class="page-sidebar-menu  <?= (strtolower($this->params['controller']) == 'contaspagar') ? 'page-sidebar-menu-closed' : '' ?>" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+		<ul class="page-sidebar-menu  <?= (strtolower($this->params['controller']) == 'contaspagar' || strtolower($this->params['controller']) == 'contasreceber') ? 'page-sidebar-menu-closed' : '' ?>" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 
 			<li class="nav-item start <?php echo (strtolower($this->params['controller']) == 'dashboard') ? 'active open' : '' ?>">
 				<a href="<?php echo $this->Html->url(array('controller' => 'Dashboard', 'action' => 'index')) ?>" class="nav-link nav-toggle">
@@ -56,6 +56,15 @@
 				</a>
 			</li>
 
+			<li class="nav-item start <?php echo (strtolower($this->params['controller']) == 'contasreceber') ? 'active open' : '' ?>">
+				<a href="<?php echo $this->Html->url(array('controller' => 'ContasReceber', 'action' => 'index')) ?>" class="nav-link nav-toggle">
+				<i class="fa fa-list"></i>
+					<span class="title">Receitas</span>
+					<span class="selected"></span>
+					<!-- <span class="arrow"></span> -->
+				</a>
+			</li>
+
 
 			<li class="<?php echo (in_array(strtolower($this->params['controller']), array('relatorios'))) ? 'active open' : ''; ?>">
 
@@ -65,12 +74,12 @@
 					<span class="arrow"></span>
 				</a>
 
-				<ul class="sub-menu">
+				<!--<ul class="sub-menu">
 					<li class="<?php echo (strtolower($this->params['controller']) == "relatorios") ? 'active' : ''; ?>">
 						<a href="<?php echo $this->Html->url(array('controller' => 'Relatorios', 'action' => 'clientes_vencer')) ?>">
 						Romaneios em Aberto</a>
 					</li>
-				</ul>
+				</ul>-->
 
 			</li>
 

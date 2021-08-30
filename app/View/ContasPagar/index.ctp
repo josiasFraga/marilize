@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-				<h4 class="modal-title">Contas à Pagar</h4>
+				<h4 class="modal-title">Despesas</h4>
 			</div>
 			<div class="modal-body">
 				<div id="viewDataPago"></div>				
@@ -155,7 +155,7 @@
 <div class="page-head">
 <!-- BEGIN PAGE TITLE -->
 <div class="page-title">
-	<h1>Contas à Pagar <small>administrar Contas</small></h1>
+	<h1>Despesas <small>administrar Contas</small></h1>
 </div>
 <!-- END PAGE TITLE -->
 </div>
@@ -167,7 +167,7 @@
 	<i class="fa fa-circle"></i>
 </li>
 <li>
-	<a href="#">Contas à Pagar</a>
+	<a href="#">Despesas</a>
 </li>
 </ul>
 
@@ -182,7 +182,7 @@
 		<div class="portlet-title">
 			<div class="caption">
 				<i class="font-dark"></i>
-				<span class="caption-subject font-dark bold uppercase">Contas à Pagar</span>
+				<span class="caption-subject font-dark bold uppercase">Despesas</span>
 			</div>
 			<div class="actions">
 				<a role="button" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'ContasPagar', 'action' => 'adicionar')) ?>" class="btn btn-circle btn-success">

@@ -19,11 +19,11 @@
 </div>
 
 <div class="row">
-	<div class="col-lg-12 col-xs-12 col-sm-12">
+	<div class="col-md-6">
 		<div class="portlet light bordered">
 			<div class="portlet-title">
 				<div class="caption">
-					<span class="caption-subject bold uppercase font-dark">GADO GORDO - VENCIMENTOS DE HOJE E ATRASADOS</span>
+					<span class="caption-subject bold uppercase font-dark">Próximas Despesas</span>
 				</div>
 			</div>
 			<div class="portlet-body">
@@ -31,32 +31,33 @@
 					<table class="table table-bordered table-condensed table-striped">
 						<thead>
 							<tr>
-								<th width="15%">Romaneio Nº</th>
-								<th width="15%">Emissão em</th>
-								<th width="20%">Comprador</th>
-								<th width="20%">Vendedor</th>
-								<th width="15%">Vencimento original</th>
+								<th width="15%">Vencimento</th>
+								<th width="25">Fazenda</th>
+								<th width="30%">Fornecedor</th>
 								<th width="15%">Valor</th>
+								<th width="15%" class="text-center">Ações</th>
 							</tr>
 						</thead>
 						<tbody>
-						<?php foreach ($romaneios_gordo_vencimentos as $key => $value): ?>
-							<tr class="<?php echo $value['RomaneioVencimento']['_atrasado'] ? 'danger' : '' ?>">
-								<td>
+						<?php foreach ($despesas as $key => $value): ?>
+							<tr class="<?php echo $value['PagamentoData']['_atrasado'] ? 'danger' : ($value['PagamentoData']['_hoje'] ? 'info' : '') ?>">
+								<!--<td>
 									<a href="<?php echo $this->Html->url(['controller' => 'RomaneioGordo', 'action' => 'alterar', $value['Romaneio']['id']]) ?>" target="_BLANK"><?php echo $value['Romaneio']['numero'] ?></a>		
-								</td>
-								<td><?php echo date('d/m/Y', strtotime($value['Romaneio']['data_emissao'])) ?></td>
+								</td>-->
+								<td><?php echo date('d/m/Y', strtotime($value['PagamentoData']['data_venc'])) ?></td>
+								<td><?php echo $value['Fazenda']['nome'] ?></td>
 								<td><?php echo $value['Pessoa']['nome_fantasia'] ?></td>
-								<td><?php echo $value['PessoaVendedor']['nome_fantasia'] ?></td>
-								<td><?php echo date('d/m/Y', strtotime($value['RomaneioVencimento']['vencimento_em'])) ?></td>
-								<td>R$ <?php echo number_format($value['RomaneioVencimento']['valor'], 2, ',', '.') ?></td>
-
+								<td>R$ <?php echo number_format($value['PagamentoData']['valor'], 2, ',', '.') ?></td>
+								<td  class="text-center">
+								<!--<?= '<button title="Vence em '.date('d/m/Y', strtotime($value['PagamentoData']['data_venc'])).'" type="button" class="btn btn-icon-only yellow-lemon" data-toggle="modal" data-target="#modalAddPagamento" data-whatever="'.$value['PagamentoData']['id'].'"><i class="fa fa-money"></i></button>' ?>-->
+								<?= '<a href="'.Router::url(array('controller' => 'ContasPagar', 'action' => 'alterar', $value['PagamentoData']['id'])).'" class="btn btn-icon-only green" data-toggle=""><i class="fa fa-pencil"></i></a>'; ?>
+								</td>
 							</tr>
 						<?php endforeach ?>
 
-						<?php if (!$romaneios_gordo_vencimentos): ?>
+						<?php if (!$despesas || count($despesas) == 0): ?>
 							<tr>
-								<td colspan="6">Não há vencimentos de Gordo para hoje.</td>
+								<td colspan="5">Não há contas a vencer.</td>
 							</tr>
 						<?php endif; ?>
 						</tbody>
@@ -66,11 +67,11 @@
 		</div>
 	</div>
 
-	<div class="col-lg-12 col-xs-12 col-sm-12">
+	<div class="col-md-6">
 		<div class="portlet light bordered">
 			<div class="portlet-title">
 				<div class="caption">
-					<span class="caption-subject bold uppercase font-dark">GADO INVERNAR - VENCIMENTOS DE HOJE E ATRASADOS</span>
+					<span class="caption-subject bold uppercase font-dark">Próximas Receitas</span>
 				</div>
 			</div>
 			<div class="portlet-body">
@@ -78,32 +79,33 @@
 					<table class="table table-bordered table-condensed table-striped">
 						<thead>
 							<tr>
-								<th width="15%">Romaneio Nº</th>
-								<th width="15%">Emissão em</th>
-								<th width="20%">Comprador</th>
-								<th width="20%">Vendedor</th>
-								<th width="15%">Vencimento original</th>
+								<th width="15%">Vencimento</th>
+								<th width="25">Fazenda</th>
+								<th width="30%">Fornecedor</th>
 								<th width="15%">Valor</th>
+								<th width="15%" class="text-center">Ações</th>
 							</tr>
 						</thead>
 						<tbody>
-						<?php foreach ($romaneios_invernar_vencimentos as $key => $value): ?>
-							<tr style="border-color: #000 !important" class="<?php echo $value['RomaneioVencimento']['_atrasado'] ? 'danger' : '' ?>">
-								<td>
-									<a href="<?php echo $this->Html->url(['controller' => 'RomaneioInvernar', 'action' => 'alterar', $value['Romaneio']['id']]) ?>" target="_BLANK"><?php echo $value['Romaneio']['numero'] ?></a>		
-								</td>
-								<td><?php echo date('d/m/Y', strtotime($value['Romaneio']['data_emissao'])) ?></td>
+						<?php foreach ($receitas as $key => $value): ?>
+							<tr class="<?php echo $value['PagamentoData']['_atrasado'] ? 'danger' : ($value['PagamentoData']['_hoje'] ? 'info' : '') ?>">
+								<!--<td>
+									<a href="<?php echo $this->Html->url(['controller' => 'RomaneioGordo', 'action' => 'alterar', $value['Romaneio']['id']]) ?>" target="_BLANK"><?php echo $value['Romaneio']['numero'] ?></a>		
+								</td>-->
+								<td><?php echo date('d/m/Y', strtotime($value['PagamentoData']['data_venc'])) ?></td>
+								<td><?php echo $value['Fazenda']['nome'] ?></td>
 								<td><?php echo $value['Pessoa']['nome_fantasia'] ?></td>
-								<td><?php echo $value['PessoaVendedor']['nome_fantasia'] ?></td>
-								<td><?php echo date('d/m/Y', strtotime($value['RomaneioVencimento']['vencimento_em'])) ?></td>
-								<td>R$ <?php echo number_format($value['RomaneioVencimento']['valor'], 2, ',', '.') ?></td>
-
+								<td>R$ <?php echo number_format($value['PagamentoData']['valor'], 2, ',', '.') ?></td>
+								<td  class="text-center">
+								<!--<?= '<button title="Vence em '.date('d/m/Y', strtotime($value['PagamentoData']['data_venc'])).'" type="button" class="btn btn-icon-only yellow-lemon" data-toggle="modal" data-target="#modalAddPagamento" data-whatever="'.$value['PagamentoData']['id'].'"><i class="fa fa-money"></i></button>' ?>-->
+								<?= '<a href="'.Router::url(array('controller' => 'ContasPagar', 'action' => 'alterar', $value['PagamentoData']['id'])).'" class="btn btn-icon-only green" data-toggle=""><i class="fa fa-pencil"></i></a>'; ?>
+								</td>
 							</tr>
 						<?php endforeach ?>
 
-						<?php if (!$romaneios_invernar_vencimentos): ?>
+						<?php if (!$receitas || count($receitas) == 0): ?>
 							<tr>
-								<td colspan="6">Não há vencimentos de Invernar para hoje.</td>
+								<td colspan="5">Não há contas a vencer.</td>
 							</tr>
 						<?php endif; ?>
 						</tbody>

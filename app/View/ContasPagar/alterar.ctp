@@ -38,17 +38,31 @@
 
 			<div class="form-body">
 
-			<div class="row">
+				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
-							<label class="control-label">Empresa: <span class="required">*</span></label>
+							<label class="control-label">Safra: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2 required" name="data[PagamentoData][safra_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($safras as $key => $safra) { ?>
+									<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['safra_id'] ? 'selected="selected"' : '' ?>><?=$safra?></option>
+								<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="control-label">Fazenda: <span class="required">*</span></label>
 							<div class="input-icon right">
 								<!--<i class="fa"></i>-->
-								<select class="form-control select2" name="data[PagamentoData][empresa_id]">
+								<select class="form-control select2" name="data[PagamentoData][fazenda_id]">
 									<option value="">Selecione ...</option>
-								<?php foreach ($empresas as $key => $empresa) { ?>
-                                    <option value="<?=$key?>" <?= $key == $dados['PagamentoData']['empresa_id'] ? 'selected="selected"' : '' ?>><?=$empresa?></option>
-                                <?php } ?>
+								<?php foreach ($fazendas as $key => $fazenda) { ?>
+									<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['fazenda_id'] ? 'selected="selected"' : '' ?>><?=$fazenda?></option>
+								<?php } ?>
 								</select>
 							</div>
 						</div>
@@ -61,12 +75,54 @@
 								<select class="form-control select2" name="data[PagamentoData][fornecedor_id]">
 									<option value="">Selecione ...</option>
 								<?php foreach ($fornecedores as $key => $fornecedor) { ?>
-                                    <option value="<?=$key?>" <?= $key == $dados['PagamentoData']['fornecedor_id'] ? 'selected="selected"' : '' ?>><?=$fornecedor?></option>
-                                <?php } ?>
+									<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['fornecedor_id'] ? 'selected="selected"' : '' ?>><?=$fornecedor?></option>
+								<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>					
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Categoria: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][categoria_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($categorias as $key => $categoria) { ?>
+									<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['categoria_id'] ? 'selected="selected"' : '' ?>><?=$categoria?></option>
+								<?php } ?>
 								</select>
 							</div>
 						</div>
 					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Grupo: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][grupo_id]" id="grupo_id">
+									<option value="">Selecione ...</option>
+									<?php foreach ($grupos as $key => $grupo) { ?>
+										<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['grupo_id'] ? 'selected="selected"' : '' ?>><?=$grupo?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Subgrupo: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][subgrupo_id]" id="subgrupo_id">
+									<option value="">...</option>
+									<?php foreach ($subgrupos as $key => $grupo) { ?>
+										<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['subgrupo_id'] ? 'selected="selected"' : '' ?>><?=$grupo?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>					
 					<div class="col-md-3">
 						<div class="form-group">
 							<label class="control-label">Data de Vencimento: <span class="required">*</span></label>
@@ -95,21 +151,7 @@
 							</div>
 						</div>
 					</div>
-                    <div class="col-md-12">
-						<div class="form-group">
-							<label class="control-label">Categoria Pagamento: <span class="required">*</span></label>
-							<div class="input-icon right">
-								<!--<i class="fa"></i>-->
-								<select class="form-control select2" name="data[PagamentoData][categoria_id]">
-									<!-- <option value="">Selecione ...</option> -->
-								<?php foreach ($categorias as $key => $categoria) { ?>
-                                    <option value="<?=$key?>" <?= $key == $dados['PagamentoData']['categoria_id'] ? 'selected="selected"' : '' ?>><?=$categoria?></option>
-                                <?php } ?>
-								</select>
-							</div>
-						</div>
-					</div>
-                    <div class="col-md-12">
+					<div class="col-md-12">
 						<div class="form-group">
 							<label class="control-label">Status Pagamento: <span class="required">*</span></label>
 							<div class="input-icon right">
@@ -143,10 +185,10 @@
 											<option value="">Selecione ...</option>
 										<?php foreach ($listformas as $key => $forma) { ?>
 											<?php if ($dados['PagamentoData']['forma_id'] == $key) { ?>
-                                    		<option value="<?=$key?>" selected><?=$forma?></option>
-                                			<?php } else { ?>
+											<option value="<?=$key?>" selected><?=$forma?></option>
+											<?php } else { ?>
 											<option value="<?=$key?>"><?=$forma?></option>
-                                			<?php } ?>
+											<?php } ?>
 										<?php } ?>
 										</select>
 									</div>
@@ -156,22 +198,21 @@
 					</div>
 				</div>
 
-                <div class="form-group">
-                    <!-- <label class="control-label">Obs.: <span class="required">*</span></label> -->
-                    <label class="control-label">Observações: </label>
+				<div class="form-group">
+					<!-- <label class="control-label">Obs.: <span class="required">*</span></label> -->
+					<label class="control-label">Observações: </label>
 					<div class="input-icon left">
 						<!--<i class="fa"></i>-->
 					</div>
-                        <textarea class="form-control" rows="3" name="data[PagamentoData][observacoes]" placeholder=""><?php echo $dados['PagamentoData']['observacoes']; ?></textarea>
-
-                </div>
+					<textarea class="form-control" rows="3" name="data[PagamentoData][observacoes]" placeholder=""><?php echo $dados['PagamentoData']['observacoes']; ?></textarea>
+				</div>
 
 			</div>
 			<div class="form-actions">
 				<div class="row">
-					<div class="col-md-offset-8 ">
-						<button class="btn green" type="submit">Salvar Alterações</button>
+					<div class="text-right">
 						<button class="btn default" type="reset">Limpar Campos</button>
+						<button class="btn green" type="submit">Salvar Alterações</button>
 					</div>
 				</div>
 			</div>

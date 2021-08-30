@@ -45,7 +45,7 @@
 		</head>
 	<!-- END HEAD -->
 
-	<body class="page-container-bg-solid page-header-fixed page-sidebar-closed-hide-logo <?= (strtolower($this->params['controller']) == 'contaspagar') ? 'page-sidebar-closed' : '' ?>">
+	<body class="page-container-bg-solid page-header-fixed page-sidebar-closed-hide-logo <?= (strtolower($this->params['controller']) == 'contaspagar' || strtolower($this->params['controller']) == 'contasreceber') ? 'page-sidebar-closed' : '' ?>">
 		<!-- BEGIN HEADER -->
 		<div class="page-header navbar navbar-fixed-top">
 			<!-- BEGIN HEADER INNER -->

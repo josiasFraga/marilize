@@ -3,7 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-				<h4 class="modal-title">Contas à Receber</h4>
+				<h4 class="modal-title">Receitas</h4>
 			</div>
 			<div class="modal-body">
 				<div id="viewDataPago"></div>				
@@ -155,7 +155,7 @@
 <div class="page-head">
 <!-- BEGIN PAGE TITLE -->
 <div class="page-title">
-	<h1>Contas à Receber <small>administrar Contas</small></h1>
+	<h1>Receitas <small>administrar Contas</small></h1>
 </div>
 <!-- END PAGE TITLE -->
 </div>
@@ -167,7 +167,7 @@
 	<i class="fa fa-circle"></i>
 </li>
 <li>
-	<a href="#">Contas à Receber</a>
+	<a href="#">Receitas</a>
 </li>
 </ul>
 
@@ -182,11 +182,11 @@
 		<div class="portlet-title">
 			<div class="caption">
 				<i class="font-dark"></i>
-				<span class="caption-subject font-dark bold uppercase">Contas à Receber</span>
+				<span class="caption-subject font-dark bold uppercase">Receitas</span>
 			</div>
 			<div class="actions">
 				<a role="button" data-toggle="" href="<?php echo $this->Html->url(array('controller' => 'ContasReceber', 'action' => 'adicionar')) ?>" class="btn btn-circle btn-default">
-					<i class="fa fa-plus"></i> Incluir Conta à Receber</a>
+					<i class="fa fa-plus"></i> Incluir Receita</a>
 				<div class="btn-group">
 					<a class="btn red btn-outline btn-circle" href="javascript:;" data-toggle="dropdown">
 						<i class="fa fa-share"></i>
@@ -214,33 +214,79 @@
 
 		<div class="portlet-body">
 			<div class="table-scrollable">
-				<table class="table table-striped table-bordered table-hover table-checkable" id="table-receberpagamentos">
+				
+			<table class="table table-striped table-bordered table-hover table-checkable" id="table-receberpagamentos">
 					<thead>
 						<tr>
 							<th class="table-checkbox" width="20px">
 								<input type="checkbox" class="group-checkable" data-set="#table-receberpagamentos .checkboxes"/>
 							</th>
-							<th>Vencimento</th>
-							<th width="100px">Valor</th>
-							<th>OBS</th>
-							<th>Categoria</th>
+							<th>Safra</th>
+							<th>Vencimento em</th>
+							<th>Pagamento em</th>
+							<th width="15%">Fazenda</th>
+							<th width="15%">Fornecedor</th>
+							<th width="10%">Categoria</th>
 							<th>Nº Parcela</th>
+							<th width="10%">Valor</th>
+							<th>OBS</th>
 							<th>Status</th>
 							<th width="100px">Ações</th>
 						</tr>
 						<tr role="row" class="filter">
 							<td></td>
-							<td><input type="date" class="form-control form-filter input-sm" name="data_venc"></td>
-							<td><input type="text" class="form-control form-filter input-sm" name="valor"></td>
-							<td></td>
 							<td>
-								<select class="form-control form-filter input-sm" name="categoria_id">
+								<select class="form-control form-filter input-sm select2" name="safra_id">
+									<option value="">[Safra]</option>
+									<?php 
+									foreach ($safras as $key => $nome) {
+										if ( isset($safra_atual['Safra']) && isset($safra_atual['Safra']['id']) && $safra_atual['Safra']['id'] == $key ):
+									?>
+										<option value="<?=$key?>" selected="selected"><?=$nome?></option>
+									<?php 
+										else:
+											?>
+												<option value="<?=$key?>"><?=$nome?></option>
+											<?php 
+										endif;
+									}
+									?>
+								</select>
+							</td>
+							<td>
+								<input type="date" class="form-control form-filter input-sm" name="data_venc" value="<?= date('Y-m-01') ?>" style="margin-bottom:4px">
+								<input type="date" class="form-control form-filter input-sm" name="data_venc_ate" value="<?= date('Y-m-t') ?>">
+							</td>
+							<td>
+								<input type="date" class="form-control form-filter input-sm" name="data_pgto" value="" style="margin-bottom:4px">
+								<input type="date" class="form-control form-filter input-sm" name="data_pgto_ate" value="">
+							</td>
+							<td>
+								<select class="form-control form-filter input-sm select2" name="fazenda_id">
+									<option value="">Selecione ...</option>
+									<?php foreach ($fazendas as $key => $nome) { ?>
+										<option value="<?=$key?>"><?=$nome?></option>
+									<?php } ?>
+								</select>
+							</td>
+							<td>
+								<select class="form-control form-filter input-sm select2" name="fornecedor_id">
+									<option value="">Selecione ...</option>
+									<?php foreach ($fornecedores as $key => $nome) { ?>
+										<option value="<?=$key?>"><?=$nome?></option>
+									<?php } ?>
+								</select>
+							</td>
+							<td>
+								<select class="form-control form-filter input-sm select2" name="categoria_id">
 									<option value="">Selecione ...</option>
 									<?php foreach ($categorias as $key => $categoria) { ?>
 										<option value="<?=$key?>"><?=$categoria?></option>
 									<?php } ?>
 								</select>
 							</td>
+							<td></td>
+							<td></td>
 							<td></td>
 							<td>
 								<select class="form-control form-filter input-sm" name="status_id">
@@ -265,6 +311,7 @@
 					<tbody><?php ##JAVASCRIPT TRAZ AS INFORMACOES PARA ESTA TABELA COM aoColumns; ?>
 					</tbody>
 				</table>
+				
 			</div>
 		</div>
 	</div>

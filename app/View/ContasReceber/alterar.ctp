@@ -22,7 +22,7 @@
 	<div class="portlet-body form">
 		<!-- BEGIN FORM-->
         <form class="" action="#" method="post" enctype="multipart/form-data" id="alterar-contar" autocomplete="off">
-            <input type="hidden" name="data[PagamentoData][id]" value="<?php echo $dados['PagamentoData']['id'] ?>">
+			<input type="hidden" name="data[PagamentoData][id]" value="<?php echo $dados['PagamentoData']['id'] ?>">
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span class="message">Por favor, revise os campos em vermelho.</span>
@@ -39,25 +39,119 @@
 			<div class="form-body">
 
 				<div class="row">
-                    <div class="col-md-4">
+					<div class="col-md-12">
 						<div class="form-group">
-							<label class="control-label">Valor R$: <span class="required">*</span></label>
-							<div class="input-icon right">
+							<label class="control-label">Safra: <span class="required">*</span></label>
+							<div class="">
 								<!--<i class="fa"></i>-->
-								<input type="text" class="form-control moeda" name="data[PagamentoData][valor]" maxlength="12" value="<?php echo number_format($dados['PagamentoData']['valor'], '2', ',', '.'); ?>" />
+								<select class="form-control select2 required" name="data[PagamentoData][safra_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($safras as $key => $safra) { ?>
+									<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['safra_id'] ? 'selected="selected"' : '' ?>><?=$safra?></option>
+								<?php } ?>
+								</select>
 							</div>
 						</div>
 					</div>
-                    <div class="col-md-4">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="control-label">Fazenda: <span class="required">*</span></label>
+							<div class="input-icon right">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][fazenda_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($fazendas as $key => $fazenda) { ?>
+									<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['fazenda_id'] ? 'selected="selected"' : '' ?>><?=$fazenda?></option>
+								<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="control-label">Fornecedor: <span class="required">*</span></label>
+							<div class="input-icon right">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][fornecedor_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($fornecedores as $key => $fornecedor) { ?>
+									<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['fornecedor_id'] ? 'selected="selected"' : '' ?>><?=$fornecedor?></option>
+								<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>					
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Categoria: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][categoria_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($categorias as $key => $categoria) { ?>
+									<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['categoria_id'] ? 'selected="selected"' : '' ?>><?=$categoria?></option>
+								<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Grupo: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][grupo_id]" id="grupo_id">
+									<option value="">Selecione ...</option>
+								<?php foreach ($grupos as $key => $grupo) { ?>
+									<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['grupo_id'] ? 'selected="selected"' : '' ?>><?=$grupo?></option>
+								<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Subgrupo: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][subgrupo_id]" id="subgrupo_id">
+									<option value="">...</option>
+									<?php foreach ($subgrupos as $key => $grupo) { ?>
+										<option value="<?=$key?>" <?= $key == $dados['PagamentoData']['subgrupo_id'] ? 'selected="selected"' : '' ?>><?=$grupo?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>					
+					<div class="col-md-3">
 						<div class="form-group">
 							<label class="control-label">Data de Vencimento: <span class="required">*</span></label>
 							<div class="input-group date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">
-								<input type="text" class="form-control form-filter input-sm" readonly name="data[PagamentoData][data_venc]" placeholder="Vencimento em" value="<?php echo date('d/m/Y', strtotime($dados['PagamentoData']['data_venc'])); ?>">
-								<span class="input-group-btn"><button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button></span>
+							<input type="text" class="form-control form-filter input-sm" readonly name="data[PagamentoData][data_venc]" placeholder="Vencimento em" value="<?php echo date('d/m/Y', strtotime($dados['PagamentoData']['data_venc'])); ?>">
+							<span class="input-group-btn"><button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button></span>
+
+							</div>
+						</div>
+					</div>                    
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Valor (parcela): <span class="required">*</span></label>
+							<div class="input-icon right">
+								<!--<i class="fa"></i>-->
+								<input type="text" class="form-control moeda" name="data[PagamentoData][valor]" maxlength="12" value="<?php echo number_format($dados['PagamentoData']['valor'], '2', ',', '.'); ?>" />
+
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-9">
+						<div class="form-group">
+							<label class="control-label">Nº Documento:</label>
+							<div class="input-icon right">
+								<input type="text" class="form-control" name="data[PagamentoData][ndocumento]" value="<?= $dados['PagamentoData']['ndocumento'] ?>" />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
 						<div class="form-group">
 							<label class="control-label">Status Pagamento: <span class="required">*</span></label>
 							<div class="input-icon right">
@@ -71,73 +165,54 @@
 							</div>
 						</div>
 					</div>
-				</div>
-
-                <div class="row">
-					<div class="col-md-6">
-						<div class="form-group">
-							<label class="control-label">Categoria Pagamento: <span class="required">*</span></label>
-							<div class="input-icon right">
-								<!--<i class="fa"></i>-->
-								<select class="form-control" name="data[PagamentoData][categoria_id]">
-									<!-- <option value="">Selecione ...</option> -->
-								<?php foreach ($categorias as $key => $categoria) { ?>
-									<?php if ($dados['PagamentoData']['categoria_id'] == $key) { ?>
-                                    <option value="<?=$key?>" selected><?=$categoria?></option>
-                                	<?php } ?>
-                                <?php } ?>
-								</select>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6 <?php echo ($dados['PagamentoData']['status_id'] == '3')? '': 'hide'; ?>" id="data_pagto">
+					<div class="col-md-12 <?= $dados['PagamentoData']['status_id'] == 1 ? 'hide' : '' ?>" id="data_pagto">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
 									<label class="control-label">Data do Pagamento: <span class="required">*</span></label>
 									<div class="input-group date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">
-										<input type="text" class="form-control form-filter input-sm" readonly name="data[PagamentoData][data_pago]" placeholder="Pago em" value="<?php echo (!empty($dados['PagamentoData']['data_pago']) && !is_null($dados['PagamentoData']['data_pago']))? date('d/m/Y', strtotime($dados['PagamentoData']['data_pago'])) : ''; ?>">
+										<input type="text" class="form-control form-filter input-sm" readonly name="data[PagamentoData][data_pago]" placeholder="Pago em" value="<?php echo (!empty($dados['PagamentoData']['data_pago']) && !is_null($dados['PagamentoData']['data_pago']))? date('d/m/Y', strtotime($dados['PagamentoData']['data_pago'])) : '' ?>">
 										<span class="input-group-btn"><button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button></span>
 									</div>
 								</div>
 							</div><!-- ./col -->
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label">Forma: <span class="required">*</span></label>
+									<label class="control-label">Forma de pagamento: <span class="required">*</span></label>
 									<div class="input-icon right">
 										<!--<i class="fa"></i>-->
 										<select class="form-control" name="data[PagamentoData][forma_id]">
 											<option value="">Selecione ...</option>
 										<?php foreach ($listformas as $key => $forma) { ?>
 											<?php if ($dados['PagamentoData']['forma_id'] == $key) { ?>
-                                    		<option value="<?=$key?>" selected><?=$forma?></option>
-                                			<?php } else { ?>
+											<option value="<?=$key?>" selected><?=$forma?></option>
+											<?php } else { ?>
 											<option value="<?=$key?>"><?=$forma?></option>
-                                			<?php } ?>
+											<?php } ?>
 										<?php } ?>
 										</select>
 									</div>
 								</div>
 							</div><!-- ./col -->
 						</div>
-					</div>                   
+					</div>
 				</div>
 
-                <div class="form-group">
-                    <!-- <label class="control-label">Obs.: <span class="required">*</span></label> -->
-                    <label class="control-label">Observações: </label>
+				<div class="form-group">
+					<!-- <label class="control-label">Obs.: <span class="required">*</span></label> -->
+					<label class="control-label">Observações: </label>
 					<div class="input-icon left">
 						<!--<i class="fa"></i>-->
-                        <textarea class="form-control" rows="3" name="data[PagamentoData][observacoes]" placeholder=""><?php echo $dados['PagamentoData']['observacoes']; ?></textarea>
 					</div>
-                </div>
+					<textarea class="form-control" rows="3" name="data[PagamentoData][observacoes]" placeholder=""><?php echo $dados['PagamentoData']['observacoes']; ?></textarea>
+				</div>
 
 			</div>
 			<div class="form-actions">
 				<div class="row">
-					<div class="col-md-offset-8 ">
-						<button class="btn green" type="submit">Salvar Alterações</button>
+					<div class="text-right">
 						<button class="btn default" type="reset">Limpar Campos</button>
+						<button class="btn green" type="submit">Salvar Alterações</button>
 					</div>
 				</div>
 			</div>

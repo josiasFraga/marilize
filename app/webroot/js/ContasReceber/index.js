@@ -120,11 +120,14 @@ var Index = function () {
 				{ "sClass": "text-center" },
 				{ "sClass": "text-center" },
 				{ "sClass": "text-center" },
-				{ 'bSortable': false, "sClass": "text-center" },
+				{  },
+				{  },
+				{  },
+				{ 'bSortable' : false, "sClass": "text-center" },
 				{ "sClass": "text-center" },
-				{ 'bSortable': false, "sClass": "text-center" },
-				// { "sClass": "text-center" },
-				{ 'bSortable' : false, "sClass": "text-center" }
+				{ 'bSortable' : false},
+				{ "sClass": "text-center" },
+				{ 'bSortable' : false, "sClass": "text-center" },
 			],
 
 				"bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.

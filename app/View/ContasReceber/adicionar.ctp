@@ -4,7 +4,7 @@
 		<a href="<?php echo $this->Html->url(array('controller' => 'Dashboard', 'action' => 'index')) ?>">Dashboard</a><i class="fa fa-circle"></i>
 	</li>
 	<li>
-		<a href="<?php echo $this->Html->url(array('controller' => 'ContasReceber', 'action' => 'index')) ?>">Contas à Receber</a><i class="fa fa-circle"></i>
+		<a href="<?php echo $this->Html->url(array('controller' => 'ContasReceber', 'action' => 'index')) ?>">Receitas</a><i class="fa fa-circle"></i>
 	</li>
 	<li class="active">
 		Adicionar
@@ -15,7 +15,7 @@
 	<div class="portlet-title">
 		<div class="caption">
 			<i class="icon-plus font-dark"></i>
-			<span class="caption-subject font-dark bold uppercase">Adicionar Conta à Receber</span>
+			<span class="caption-subject font-dark bold uppercase">Adicionar Receita</span>
 			<span class="caption-helper"></span>
 		</div>
         <div class="actions">
@@ -25,7 +25,27 @@
 	<div class="portlet-body form">
 		<!-- BEGIN FORM-->
         <form class="" action="#" method="post" enctype="multipart/form-data" id="adicionar-contar" autocomplete="off">
+
+			<div class="modal fade" id="parcelas" tabindex="-1" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 class="modal-title">Parcelas</h4>
+						</div>
+						<div class="modal-body">
+							
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn green" data-dismiss="modal">Ok</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		
             <input type="hidden" name="data[PagamentoData][tipo]" value="E">
+
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
 				<span class="message">Por favor, revise os campos em vermelho.</span>
@@ -38,44 +58,135 @@
 			  <button class="close" data-close="alert"></button>
 			  <span class="message"></span>
 			</div>
-
 			<div class="form-body">
 
                 <div class="row">
-                    <div class="col-md-4">
+					<div class="col-md-12">
 						<div class="form-group">
-							<label class="control-label">Valor R$: <span class="required">*</span></label>
-							<div class="input-icon right">
+							<label class="control-label">Safra: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2 required" name="data[PagamentoData][safra_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($safras as $key => $safra) { ?>
+                                    <option value="<?=$key?>"><?=$safra?></option>
+                                <?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="control-label">Fazenda: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2 required" name="data[PagamentoData][fazenda_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($fazendas as $key => $fazenda) { ?>
+                                    <option value="<?=$key?>"><?=$fazenda?></option>
+                                <?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="control-label">Fornecedor: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][fornecedor_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($fornecedores as $key => $fornecedor) { ?>
+                                    <option value="<?=$key?>"><?=$fornecedor?></option>
+                                <?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Categoria: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][categoria_id]">
+									<option value="">Selecione ...</option>
+								<?php foreach ($categorias as $key => $categoria) { ?>
+                                    <option value="<?=$key?>"><?=$categoria?></option>
+                                <?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Grupo: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][grupo_id]" id="grupo_id">
+									<option value="">Selecione ...</option>
+									<?php foreach ($grupos as $key => $grupo) { ?>
+										<option value="<?=$key?>"><?=$grupo?></option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Subgrupo: <span class="required">*</span></label>
+							<div class="">
+								<!--<i class="fa"></i>-->
+								<select class="form-control select2" name="data[PagamentoData][subgrupo_id]" id="subgrupo_id">
+									<option value="">selecione um grupo ...</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Data de Vencimento: <span class="required">*</span></label>
+							<div class="input-group date date-picker-vencimento margin-bottom-5" data-date-format="dd/mm/yyyy">
+								<input type="text" class="form-control form-filter" readonly name="data[PagamentoData][data_venc]" placeholder="Vencimento em">
+								<span class="input-group-btn"><button class="btn default" type="button"><i class="fa fa-calendar"></i></button></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							<label class="control-label">Valor total: <span class="required">*</span></label>
+							<div class="">
 								<!--<i class="fa"></i>-->
 								<input type="text" class="form-control moeda" name="data[PagamentoData][valor]" maxlength="12" minlength="3"/>
 							</div>
 						</div>
 					</div>
-                    <div class="col-md-4">
-						<div class="form-group">
-							<label class="control-label">Data de Vencimento: <span class="required">*</span></label>
-							<div class="input-group date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">
-								<input type="text" class="form-control form-filter input-sm" readonly name="data[PagamentoData][data_venc]" placeholder="Vencimento em">
-								<span class="input-group-btn"><button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button></span>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
+                    <div class="col-md-3">
 						<div class="form-group">
 							<label class="control-label">Nº de Parcelas: </label>
-							<div class="input-icon right">
+							<div class="input-group">
 								<!--<i class="fa"></i>-->
-								<input type="text" class="form-control numero" name="data[nparcelas]" maxlength="7"/>
+								<input type="text" class="form-control numero" name="data[nparcelas]" maxlength="7" value="1" />
+								<span class="input-group-btn">
+									<button class="btn yellow" type="button" disabled="disabled" id="alterar_parcelas">Alterar Parcelas</button>
+								</span>
 							</div>
 						</div>
 					</div>
 				</div>
-
-                <div class="row">
-					<div class="col-md-3">
+				<div class="row">
+					
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="control-label">Nº Documento:</label>
+							<div class="">
+								<input type="text" class="form-control" name="data[PagamentoData][ndocumento]" />
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-12">
 						<div class="form-group">
 							<label class="control-label">Status Pagamento: <span class="required">*</span></label>
-							<div class="input-icon right">
+							<div class="">
 								<!--<i class="fa"></i>-->
 								<select class="form-control" name="data[PagamentoData][status_id]" id="status_pagto">
 									<option value="">Selecione ...</option>
@@ -86,35 +197,21 @@
 							</div>
 						</div>
 					</div>
-                    <div class="col-md-4">
-						<div class="form-group">
-							<label class="control-label">Categoria Pagamento: <span class="required">*</span></label>
-							<div class="input-icon right">
-								<!--<i class="fa"></i>-->
-								<select class="form-control" name="data[PagamentoData][categoria_id]">
-									<option value="">Selecione ...</option>
-								<?php foreach ($categorias as $key => $categoria) { ?>
-                                    <option value="<?=$key?>"><?=$categoria?></option>
-                                <?php } ?>
-								</select>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-5 hide" id="data_pagto">
+					<div class="col-md-12 hide" id="data_pagto">
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
 									<label class="control-label">Data do Pagamento: <span class="required">*</span></label>
 									<div class="input-group date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">
-										<input type="text" class="form-control form-filter input-sm" readonly name="data[PagamentoData][data_pago]" placeholder="Pago em">
-										<span class="input-group-btn"><button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button></span>
+										<input type="text" class="form-control form-filter" readonly name="data[PagamentoData][data_pago]" placeholder="Pago em">
+										<span class="input-group-btn"><button class="btn default" type="button"><i class="fa fa-calendar"></i></button></span>
 									</div>
 								</div>
 							</div><!-- ./col -->
 							<div class="col-md-6">
 								<div class="form-group">
-									<label class="control-label">Forma: <span class="required">*</span></label>
-									<div class="input-icon right">
+									<label class="control-label">Forma de pagamento: <span class="required">*</span></label>
+									<div class="">
 										<!--<i class="fa"></i>-->
 										<select class="form-control" name="data[PagamentoData][forma_id]">
 											<option value="">Selecione ...</option>

@@ -127,6 +127,40 @@ var Alterar = function () {
         }
     });
 
+    var initDependents = function (){
+
+        $('select#grupo_id').change(function(){
+    
+            var grupo_id = $(this).val();
+            $('#subgrupo_id').html('<option value="">carregando...</option>');
+    
+            App.blockUI({
+	            target: 'form#adicionar-contap',
+	            boxed: true,
+	            message: 'Carregando subgrupos, aguarde...'
+	        });
+
+	        $.getJSON(baseUrl+'ContasPagar/subgrupos_dependents/'+grupo_id, {}, function(data){
+                var dados = data.dados;
+                if ( dados.length == 0 ) {
+                    $('#subgrupo_id').html('<option value="">nenhum subgrupo encontrado!</option>');
+                } else {
+                    $('#subgrupo_id').html('<option value="">[Subgrupo]</option>');                    
+                }
+                
+
+	        	$.each(dados,function(index, val){
+	        		$('#subgrupo_id').append('<option value="'+index+'">'+val+'</option>');
+	        	});
+
+	        	App.unblockUI('form#adicionar-contap');
+
+	        	$('#subgrupo_id').select2();
+
+	        });
+        });
+    }
+
     return {
 
         //main function to initiate the module
@@ -135,6 +169,7 @@ var Alterar = function () {
             initMisc();
             initMasks();
             initPickers();
+            initDependents();
         }
 
     };

@@ -3,3 +3,4 @@ div.selection-cliente-propriedade{ position: relative; float: left; margin-top:2
 .page-header.navbar .page-logo .logo-default {
     margin: 29px 10px 0;
 }
+.input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn, .input-sm{height: 34px !important;}

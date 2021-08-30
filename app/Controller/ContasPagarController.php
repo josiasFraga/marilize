@@ -37,7 +37,6 @@ class ContasPagarController extends ContasController {
         $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual'));
     }
 
-    
     public function imprimir() {
         $this->layout = 'pdf';
 
@@ -54,7 +53,7 @@ class ContasPagarController extends ContasController {
         $this->loadModel('PagamentoData');
 
         $registros = $this->PagamentoData->find('all', array_merge($dados, [
-            'order' => ['Empresa.nome', 'PagamentoData.data_pago', 'PagamentoData.data_venc']
+            'order' => ['Fazenda.nome', 'PagamentoData.data_pago', 'PagamentoData.data_venc']
         ]));
         foreach ($registros as $key => $registro) {
             // descobrir quantas parcelas são
@@ -125,7 +124,7 @@ class ContasPagarController extends ContasController {
 
         if ( !empty($this->request->data) ) {
             if ( $this->request->data['PagamentoData']['id'] == null ){
-                return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( "status" => "erro", "msg" => "Conta à Pagar, a ser alterada não informada." ))));
+                return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( "status" => "erro", "msg" => "Despesa, a ser alterada não informada." ))));
             }
             $this->layout = "ajax";
             return $this->update();
@@ -140,7 +139,7 @@ class ContasPagarController extends ContasController {
         $dados = $this->PagamentoData->findById($id);
 
         if (count($dados) <= 0) {
-            $this->Session->setFlash('Conta à Pagar Incorreta!!!', 'flash_error');
+            $this->Session->setFlash('Despesa Incorreta!!!', 'flash_error');
             return $this->routing();
         }
 
@@ -150,13 +149,27 @@ class ContasPagarController extends ContasController {
         $this->loadModel('PagamentoForma');
         $listformas = $this->PagamentoForma->listaPagamentoForma();
 
-        $this->loadModel('Empresa');
-        $empresas = $this->Empresa->listaEmpresas();
+        $this->loadModel('Fazenda');
+        $fazendas = $this->Fazenda->listaFazendas();
 
         $this->loadModel('Pessoa');
         $fornecedores = $this->Pessoa->findListAllPessoas(2);
 
-        $this->set(compact('dados', 'categorias', 'listformas', 'empresas', 'fornecedores'));
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
+
+        if ( $dados['PagamentoData']['grupo_id'] != '' ) {
+            $this->loadModel('ContaSubgrupo');
+            $subgrupos = $this->ContaSubgrupo->listaSubgrupos($dados['PagamentoData']['grupo_id']);
+
+        }
+    
+        $this->loadModel('Safra');
+        $safras = $this->Safra->listaSafras();
+
+        $safra_atual = $this->Safra->buscaSafraAtual();
+
+        $this->set(compact('dados', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual', 'grupos', 'subgrupos'));
     }
 
     public function subgrupos_dependents($grupo_id = null) {

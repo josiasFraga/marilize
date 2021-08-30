@@ -71,16 +71,58 @@ class DashboardController extends AppController {
         $romaneios_invernar_vencimentos = $this->_verificaRomaneiosAtrasados($romaneios_invernar_vencimentos);
 
         $this->set(compact('romaneios_gordo_vencimentos', 'romaneios_invernar_vencimentos'));*/
+        $hoje = date('Y-m-d');
+        $prazo_max = date('Y-m-d', strtotime($hoje. ' + '.$this->prazo_contas_dashboard.' days'));
+
+        $this->loadModel('PagamentoData');
+        $despesas = $this->PagamentoData->find('all',[
+            'fields' => ['*'],
+            'conditions' => [
+                'PagamentoData.data_venc <= ' => $prazo_max,
+                'PagamentoData.status_id' => [1,2,4,5,6,7],
+                'PagamentoData.ativo' => 'Y',
+                'PagamentoData.tipo' => 'S'
+            ],
+            'order' => [
+                'PagamentoData.data_venc'
+            ],
+            'link' => ['Fazenda', 'Pessoa']
+        ]);
+
+        $despesas = $this->_verificaContaAtrasada($despesas);
+
+        $receitas = $this->PagamentoData->find('all',[
+            'fields' => ['*'],
+            'conditions' => [
+                'PagamentoData.data_venc <= ' => $prazo_max,
+                'PagamentoData.status_id' => [1,2,4,5,6,7],
+                'PagamentoData.ativo' => 'Y',
+                'PagamentoData.tipo' => 'E'
+            ],
+            'order' => [
+                'PagamentoData.data_venc'
+            ],
+            'link' => ['Fazenda', 'Pessoa']
+        ]);
+
+        $receitas = $this->_verificaContaAtrasada($receitas);
+        $this->set(compact('despesas', 'receitas'));
+
+
     }
 
-    private function _verificaRomaneiosAtrasados($romaneios) {
-        return array_map(function($romaneio) {
-            $romaneio['RomaneioVencimento']['_atrasado'] = false;
-            if ($romaneio['RomaneioVencimento']['vencimento_em'] < date('Y-m-d')) {
-                $romaneio['RomaneioVencimento']['_atrasado'] = true;
+    private function _verificaContaAtrasada($contas) {
+        return array_map(function($conta) {
+            $conta['PagamentoData']['_atrasado'] = false;
+            $conta['PagamentoData']['_hoje'] = false;
+            if ($conta['PagamentoData']['data_venc'] < date('Y-m-d')) {
+                $conta['PagamentoData']['_atrasado'] = true;
             }
-            return $romaneio;
-        }, $romaneios);
+            if ($conta['PagamentoData']['data_venc'] == date('Y-m-d')) {
+                $conta['PagamentoData']['_hoje'] = true;
+            }
+            return $conta;
+        }, $contas);
     }
 
     public function infobarData() {

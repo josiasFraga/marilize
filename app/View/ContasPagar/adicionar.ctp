@@ -4,7 +4,7 @@
 		<a href="<?php echo $this->Html->url(array('controller' => 'Dashboard', 'action' => 'index')) ?>">Dashboard</a><i class="fa fa-circle"></i>
 	</li>
 	<li>
-		<a href="<?php echo $this->Html->url(array('controller' => 'ContasPagar', 'action' => 'index')) ?>">Contas à Pagar</a><i class="fa fa-circle"></i>
+		<a href="<?php echo $this->Html->url(array('controller' => 'ContasPagar', 'action' => 'index')) ?>">Despesas</a><i class="fa fa-circle"></i>
 	</li>
 	<li class="active">
 		Adicionar
@@ -15,7 +15,7 @@
 	<div class="portlet-title">
 		<div class="caption">
 			<i class="icon-plus font-dark"></i>
-			<span class="caption-subject font-dark bold uppercase">Adicionar Conta à Pagar</span>
+			<span class="caption-subject font-dark bold uppercase">Adicionar Despesas</span>
 			<span class="caption-helper"></span>
 		</div>
         <div class="actions">
@@ -125,9 +125,9 @@
 								<!--<i class="fa"></i>-->
 								<select class="form-control select2" name="data[PagamentoData][grupo_id]" id="grupo_id">
 									<option value="">Selecione ...</option>
-								<?php foreach ($grupos as $key => $categoria) { ?>
-                                    <option value="<?=$key?>"><?=$categoria?></option>
-                                <?php } ?>
+									<?php foreach ($grupos as $key => $grupo) { ?>
+										<option value="<?=$key?>"><?=$grupo?></option>
+									<?php } ?>
 								</select>
 							</div>
 						</div>
