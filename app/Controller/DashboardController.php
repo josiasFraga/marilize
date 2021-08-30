@@ -27,50 +27,6 @@ class DashboardController extends AppController {
 
         $this->set('title_for_layout', 'Início');
 
-        /*$this->loadModel('Romaneio');
-        $romaneios_gordo_vencimentos = $this->Romaneio->RomaneioVencimento->find('all', [
-            'fields' => [
-                'Romaneio.id',
-                'Pessoa.nome_fantasia',
-                'PessoaVendedor.nome_fantasia',
-                'Romaneio.numero',
-                'RomaneioVencimento.vencimento_em',
-                'RomaneioVencimento.valor',
-                'Romaneio.data_emissao'
-            ],
-            'conditions' => [
-                'RomaneioVencimento.vencimento_em <=' => date('Y-m-d'),
-                'Romaneio.tipo' => 0,
-                'RomaneioVencimento.pago' => 0
-            ],
-            'link' => ['Romaneio' => ['Pessoa', 'PessoaVendedor']],
-            'order' => 'RomaneioVencimento.vencimento_em'
-        ]);
-
-
-        $romaneios_invernar_vencimentos = $this->Romaneio->RomaneioVencimento->find('all', [
-            'fields' => [
-                'Romaneio.id',
-                'Pessoa.nome_fantasia',
-                'PessoaVendedor.nome_fantasia',
-                'Romaneio.numero',
-                'RomaneioVencimento.vencimento_em',
-                'RomaneioVencimento.valor',
-                'Romaneio.data_emissao',
-            ],
-            'conditions' => [
-                'RomaneioVencimento.vencimento_em <=' => date('Y-m-d'),
-                'Romaneio.tipo' => 1,
-                'RomaneioVencimento.pago' => 0
-            ],
-            'link' => ['Romaneio' => ['Pessoa', 'PessoaVendedor']],
-            'order' => 'RomaneioVencimento.vencimento_em'
-        ]);
-
-        $romaneios_gordo_vencimentos = $this->_verificaRomaneiosAtrasados($romaneios_gordo_vencimentos);
-        $romaneios_invernar_vencimentos = $this->_verificaRomaneiosAtrasados($romaneios_invernar_vencimentos);
-
-        $this->set(compact('romaneios_gordo_vencimentos', 'romaneios_invernar_vencimentos'));*/
         $hoje = date('Y-m-d');
         $prazo_max = date('Y-m-d', strtotime($hoje. ' + '.$this->prazo_contas_dashboard.' days'));
 
@@ -106,7 +62,11 @@ class DashboardController extends AppController {
         ]);
 
         $receitas = $this->_verificaContaAtrasada($receitas);
-        $this->set(compact('despesas', 'receitas'));
+
+        $this->loadModel('PagamentoForma');
+        $listformas = $this->PagamentoForma->listaPagamentoForma();
+
+        $this->set(compact('despesas', 'receitas', 'listformas'));
 
 
     }
