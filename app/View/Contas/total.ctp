@@ -1,0 +1,1 @@
+R$ <?= number_format($total,2,',','.') ?>

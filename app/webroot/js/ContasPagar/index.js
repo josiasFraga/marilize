@@ -75,14 +75,50 @@ var Index = function () {
 			})
 		})
 	}
+	
+
+	var calclulaTotal = function() {
+
+		params = {};
+
+		// get all typeable inputs
+		$('textarea.form-filter, select.form-filter, input.form-filter:not([type="radio"],[type="checkbox"])', $("#table-pagarpagamentos")).each(function() {
+			let name = $(this).attr("name");
+			let valor = $(this).val()
+			params[name] = valor;
+		});
+
+		// get all checkboxes
+		$('input.form-filter[type="checkbox"]:checked', $("#table-pagarpagamentos")).each(function() {
+			let name = $(this).attr("name");
+			let valor = $(this).val()
+			params[name] = valor;
+		});
+
+		// get all radio buttons
+		$('input.form-filter[type="radio"]:checked', $("#table-pagarpagamentos")).each(function() {
+			let name = $(this).attr("name");
+			let valor = $(this).val()
+			params[name] = valor;
+		});
+
+		$.get(baseUrl + 'Contas/total/s', params,function(data){
+
+			$('table#table-pagarpagamentos tfoot tr th:eq(8)').html(data);
+
+		});
+
+	}
 
 	var handleRecords = function () {
 
 		grid.init({
+			
 			src: $("#table-pagarpagamentos"),
 			onSuccess: function (grid) {
 				// execute some code after table records loaded
 				initMasks();
+				calclulaTotal();
 			},
 			onError: function (grid) {
 				// execute some code on network or other general error
@@ -116,24 +152,24 @@ var Index = function () {
 					}
 				},
 
-			"aoColumns": [
-				{ 'bSortable' : false, "sClass": "text-center" },
-				{ "sClass": "text-center" },
-				{ "sClass": "text-center" },
-				{ "sClass": "text-center" },
-				{  },
-				{  },
-				{  },
-				{ 'bSortable' : false, "sClass": "text-center" },
-				{ "sClass": "text-center" },
-				{ 'bSortable' : false},
-				{ "sClass": "text-center" },
-				{ 'bSortable' : false, "sClass": "text-center" },
+				"aoColumns": [
+					{ 'bSortable' : false, "sClass": "text-center" },
+					{ "sClass": "text-center" },
+					{ "sClass": "text-center" },
+					{ "sClass": "text-center" },
+					{  },
+					{  },
+					{  },
+					{ 'bSortable' : false, "sClass": "text-center" },
+					{ "sClass": "text-center" },
+					{ 'bSortable' : false},
+					{ "sClass": "text-center" },
+					{ 'bSortable' : false, "sClass": "text-center" },
 
-				
-			],
+					
+				],
 
-				"bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+				"bStateSave": false, // save datatable state(pagination, sort, etc) in cookie.
 				"sDom": "t<'row'<'col-md-8 col-sm-12'pi><'col-md-4 col-sm-12'>>",
 
 				"lengthMenu": [

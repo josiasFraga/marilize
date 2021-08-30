@@ -1032,4 +1032,101 @@ class ContasController extends AppController {
 
     }
 
+    public function total($tipo = null) {
+        
+
+        $this->layout = "ajax";
+
+        if ( !$this->request->is('get') || empty($this->request->query) ) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => 'Requisição inválida!' ))));
+        }
+
+        $conditions = array();
+
+        if (!is_null($tipo)) {
+            $conditions = array_merge($conditions, array("PagamentoData.tipo" => $tipo));
+        }
+    
+        $conditions = array_merge($conditions, array("PagamentoData.ativo" => 'Y'));
+
+        if (isset($this->request->query['safra_id']) && !empty($this->request->query['safra_id'])) {
+            $conditions = array_merge($conditions, array("PagamentoData.safra_id" => $this->request->query["safra_id"]));
+        }
+
+        if (!isset($this->request->query['data_venc']) && !isset($this->request->query['data_venc_ate'])) {
+            $conditions = array_merge($conditions, array("PagamentoData.data_venc BETWEEN ? AND ?" => [date('Y-m-01'), date('Y-m-t')]));
+        } else {
+            if (!empty($this->request->query['data_venc'])) {
+                $conditions = array_merge($conditions, array("PagamentoData.data_venc >=" => $this->request->query["data_venc"]));
+            }
+
+            if (!empty($this->request->query['data_venc_ate'])) {
+                $conditions = array_merge($conditions, array("PagamentoData.data_venc <=" => $this->request->query['data_venc_ate']));
+            }
+
+            /*if (empty($this->request->query['data_venc']) && empty($this->request->query['data_venc_ate'])) {
+                $conditions = array_merge($conditions, array("PagamentoData.data_venc BETWEEN ? AND ?" => [date('Y-m-01'), date('Y-m-t')]));
+            }*/
+        }
+
+        if (isset($this->request->query['data_pgto']) && !empty($this->request->query['data_pgto'])) {
+            $conditions = array_merge($conditions, array("PagamentoData.data_pago >=" => $this->request->query["data_pgto"]));
+        }
+
+        if (isset($this->request->query['data_pgto_ate']) && !empty($this->request->query['data_pgto_ate'])) {
+            $conditions = array_merge($conditions, array("PagamentoData.data_pago <=" => $this->request->query['data_pgto_ate']));
+        }
+
+        if (isset($this->request->query['fazenda_id']) && !empty($this->request->query['fazenda_id'])) {
+            $conditions = array_merge($conditions, array("PagamentoData.fazenda_id" => $this->request->query["fazenda_id"]));
+        }
+
+        if (isset($this->request->query['fornecedor_id']) && !empty($this->request->query['fornecedor_id'])) {
+            $conditions = array_merge($conditions, array("PagamentoData.fornecedor_id" => $this->request->query["fornecedor_id"]));
+        }
+
+        if (isset($this->request->query['categoria_id']) && !empty($this->request->query['categoria_id'])) {
+            $conditions = array_merge($conditions, array("PagamentoData.categoria_id" => $this->request->query["categoria_id"]));
+        }
+
+        if (isset($this->request->query['status_id']) && !empty($this->request->query['status_id'])) {
+            $conditions = array_merge($conditions, array("PagamentoData.status_id" => $this->request->query["status_id"]));
+        }
+
+
+    
+
+
+        $this->loadModel('PagamentoData');
+
+        $this->PagamentoData->virtualFields['Total'] = 'sum(PagamentoData.valor)';
+
+        $filtro_dados = array(
+            'conditions' => $conditions,
+            //'order' => $order,
+            'fields' => array(
+                'PagamentoData.Total',
+            ),
+            'link' => array(
+                'PagamentoCategoria',
+                'PagamentoStatus',
+                'PagamentoForma',
+                'Fazenda',
+                'Pessoa',
+                'Safra'
+            )
+        );        
+
+        $dados = $this->PagamentoData->find("first",$filtro_dados);
+
+        $total = 0;
+        if ( count($dados) > 0 ) {
+            $total = $dados['PagamentoData']['Total'];
+        }
+
+        $this->set(compact('total'));
+
+
+    }
+
 }

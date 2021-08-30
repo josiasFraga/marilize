@@ -82,6 +82,7 @@ var Index = function () {
 			src: $("#table-receberpagamentos"),
 			onSuccess: function (grid) {
 				// execute some code after table records loaded
+				calclulaTotal();
 			},
 			onError: function (grid) {
 				// execute some code on network or other general error
@@ -130,7 +131,7 @@ var Index = function () {
 				{ 'bSortable' : false, "sClass": "text-center" },
 			],
 
-				"bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+				"bStateSave": false, // save datatable state(pagination, sort, etc) in cookie.
 				"sDom": "t<'row'<'col-md-8 col-sm-12'pi><'col-md-4 col-sm-12'>>",
 
 				"lengthMenu": [
@@ -344,6 +345,39 @@ var Index = function () {
 				});
 			}
 		});
+	}
+	
+	var calclulaTotal = function() {
+
+		params = {};
+
+		// get all typeable inputs
+		$('textarea.form-filter, select.form-filter, input.form-filter:not([type="radio"],[type="checkbox"])', $("#table-receberpagamentos")).each(function() {
+			let name = $(this).attr("name");
+			let valor = $(this).val()
+			params[name] = valor;
+		});
+
+		// get all checkboxes
+		$('input.form-filter[type="checkbox"]:checked', $("#table-receberpagamentos")).each(function() {
+			let name = $(this).attr("name");
+			let valor = $(this).val()
+			params[name] = valor;
+		});
+
+		// get all radio buttons
+		$('input.form-filter[type="radio"]:checked', $("#table-receberpagamentos")).each(function() {
+			let name = $(this).attr("name");
+			let valor = $(this).val()
+			params[name] = valor;
+		});
+
+		$.get(baseUrl + 'Contas/total/e', params,function(data){
+
+			$('table#table-receberpagamentos tfoot tr th:eq(8)').html(data);
+
+		});
+
 	}
 
 	var initPickers = function(){
