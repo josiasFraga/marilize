@@ -42,7 +42,6 @@ class RelatoriosController extends AppController {
 		$this->set(compact('dados', 'totais', 'medias_se', 'medias'));
 	}
 
-
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->layout = 'metronic';
@@ -222,6 +221,173 @@ class RelatoriosController extends AppController {
 		$this->set(compact('romanios_n_pagos_compradores', 'dias_semana', 'romanios_n_pagos_vendedores'));
 		//debug($romanios_n_pagos_compradores);
 		//die();
+	}
+
+	public function despesas() {
+        $this->set('title_for_layout', 'Relatório de Despesas');
+
+        $this->loadModel('PagamentoStatus');
+        $status = $this->PagamentoStatus->listaPagamentoStatus();
+
+        $this->loadModel('PagamentoCategoria');
+        $categorias = $this->PagamentoCategoria->listaPagamentoCategoria();
+
+        $this->loadModel('PagamentoForma');
+        $listformas = $this->PagamentoForma->listaPagamentoForma();
+
+        $this->loadModel('Fazenda');
+        $fazendas = $this->Fazenda->listaFazendas();
+
+        $this->loadModel('Pessoa');
+        $fornecedores = $this->Pessoa->findListAllPessoas(2);
+
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
+    
+        $this->loadModel('Safra');
+        $safras = $this->Safra->listaSafras();
+
+
+        $safra_atual = $this->Safra->buscaSafraAtual();
+
+
+        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'grupos', 'safras', 'safra_atual'));
+
+	}
+
+	public function dados_despesas() {
+	
+		$this->layout = 'ajax';
+		$this->loadModel('PagamentoData');
+		$dados_request = $this->request->data;
+
+	
+        if (empty($dados_request['Relatorio']['safra_id'])) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "A safra não pode estar em branco!"))));
+        }
+		
+        if (empty($dados_request['Relatorio']['fazenda_id'])) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "A fazenda não pode estar em branco!"))));
+        }
+		
+        if (empty($dados_request['Relatorio']['categoria_id'])) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "A categoria não pode estar em branco!"))));
+        }
+		
+        if (empty($dados_request['Relatorio']['inicio_fim'])) {
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'erro', 'msg' => "O período não pode estar em branco!"))));
+        }
+
+		list($inicio,$fim) = explode(" até ",$dados_request['Relatorio']['inicio_fim']);
+		$dados_request['Relatorio']['inicio'] = $this->dateBrEn($inicio);
+		$dados_request['Relatorio']['fim'] = $this->dateBrEn($fim);
+
+		$conditions = [
+			'PagamentoData.tipo' => 'S',
+			'PagamentoData.ativo' => 'Y',
+			'PagamentoData.data_venc >=' => $dados_request['Relatorio']['inicio'],
+			'PagamentoData.data_venc <=' => $dados_request['Relatorio']['fim'],
+			'PagamentoData.safra_id' => $dados_request['Relatorio']['safra_id'],
+			'PagamentoData.fazenda_id' => $dados_request['Relatorio']['fazenda_id'],
+			'PagamentoData.categoria_id' => $dados_request['Relatorio']['categoria_id'],
+		];
+
+        if (isset($dados_request['Relatorio']['fornecedor_id']) && !empty($dados_request['Relatorio']['fornecedor_id'])) {
+			$conditions = array_merge($conditions,[
+				'fornecedor_id' => $dados_request['Relatorio']['fornecedor_id'],
+			]);
+		}
+
+        if (isset($dados_request['Relatorio']['grupo_id']) && !empty($dados_request['Relatorio']['grupo_id'])) {
+			$conditions = array_merge($conditions,[
+				'grupo_id' => $dados_request['Relatorio']['grupo_id'],
+			]);
+		}
+
+        if (isset($dados_request['Relatorio']['status_id']) && !empty($dados_request['Relatorio']['status_id'])) {
+			$conditions = array_merge($conditions,[
+				'status_id' => $dados_request['Relatorio']['status_id'],
+			]);
+		}
+
+        if (isset($dados_request['Relatorio']['forma_id']) && !empty($dados_request['Relatorio']['forma_id'])) {
+			$conditions = array_merge($conditions,[
+				'forma_id' => $dados_request['Relatorio']['forma_id'],
+			]);
+		}
+
+		$group = ['PagamentoData.grupo_id', 'PagamentoData.subgrupo_id'];
+
+		$this->PagamentoData->virtualFields['_total'] = "SUM(PagamentoData.valor)";
+		$dados = $this->PagamentoData->find('all',[
+			'fields' => ['*'],
+			'conditions' => $conditions,
+			'group' => $group,
+			'link' => ['ContaSubgrupo', 'ContaGrupo', 'Fazenda']
+		]);
+
+		if ( count($dados) == 0 ){
+            return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'warning', 'msg' => "Nenhum dado encontrado"))));
+		}
+
+		$dados_retornar = [];
+		$totais = [];
+		
+		foreach( $dados as $key => $dado ){
+			if ( !isset($totais[$dado['ContaGrupo']['id']]) ) {
+				$totais[$dado['ContaGrupo']['id']] = (float)$dado['PagamentoData']['_total'];
+			}else{
+				$totais[$dado['ContaGrupo']['id']] += (float)$dado['PagamentoData']['_total'];
+				
+			}
+		}
+
+		foreach( $dados as $key => $dado ){
+			if ( !isset($dados_retornar[$dado['ContaGrupo']['id']]) ) {
+				$dados_retornar[$dado['ContaGrupo']['id']] = [
+					'titulo' => 'Despesas '.$dado['Fazenda']['nome'].' de '.$dados_request['Relatorio']['inicio_fim'],
+					'subtitle' => $dado['ContaGrupo']['nome'],
+					'data' => [[
+						'name' => $dado['ContaSubgrupo']['nome']." - R$ ".number_format($dado['PagamentoData']['_total'],2,",","."), 
+						'y' => (float)($dado['PagamentoData']['_total']*100)/$totais[$dado['ContaGrupo']['id']],
+					]]
+				];
+
+			} else {
+				$dados_retornar[$dado['ContaGrupo']['id']]['data'][] = [
+					'name' => $dado['ContaSubgrupo']['nome']." - R$ ".number_format($dado['PagamentoData']['_total'],2,",","."), 
+					'y' => (float)($dado['PagamentoData']['_total']*100)/$totais[$dado['ContaGrupo']['id']],
+				];
+
+			}
+		}
+
+		$dados_retornar = array_values($dados_retornar);
+
+		return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'ok', 'dados' => $dados_retornar))));
+
+
+	}
+
+	public function imprimir_pizzas() {
+        $this->layout = 'pdf';
+
+		
+        $this->Mpdf->init();
+
+        // setting filename of output pdf file
+        $this->Mpdf->setFilename('file.pdf');
+
+        // setting output to I, D, F, S
+        $this->Mpdf->setOutput('I');
+        $this->Mpdf->SetFooter("Marilize - Gráficos de Despesas");
+
+        // you can call any mPDF method via component, for example:
+        $this->Mpdf->SetWatermarkText("Draft");
+        
+		$photos = $this->request->query;
+        $this->set(compact('photos'));
+
 	}
 
 }

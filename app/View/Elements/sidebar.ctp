@@ -84,12 +84,12 @@
 					<span class="arrow"></span>
 				</a>
 
-				<!--<ul class="sub-menu">
+				<ul class="sub-menu">
 					<li class="<?php echo (strtolower($this->params['controller']) == "relatorios") ? 'active' : ''; ?>">
-						<a href="<?php echo $this->Html->url(array('controller' => 'Relatorios', 'action' => 'clientes_vencer')) ?>">
-						Romaneios em Aberto</a>
+						<a href="<?php echo $this->Html->url(array('controller' => 'Relatorios', 'action' => 'despesas')) ?>">
+						Despesas</a>
 					</li>
-				</ul>-->
+				</ul>
 
 			</li>
 

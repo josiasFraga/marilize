@@ -1129,8 +1129,6 @@ class ContasController extends AppController {
 
     }
 
-    
-
     public function imprimir($tipo=null) {
         $this->layout = 'pdf';
 
