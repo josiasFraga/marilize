@@ -10,7 +10,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th colspan="9"  class="text-center">Contas</th>
+            <th colspan="11"  class="text-center">Contas</th>
         </tr>
         <tr>
             <th class="text-center">Vencimento em</th>
@@ -18,6 +18,8 @@
             <th class="text-center">Fazenda</th>
             <th class="text-center">Fornecedor</th>
             <th class="text-center">Categoria</th>
+            <th class="text-center">Grupo</th>
+            <th class="text-center">Subgrupo</th>
             <th class="text-center">Parcela</th>
             <th class="text-center">Valor</th>
             <th class="text-center">Obs.</th>
@@ -35,6 +37,8 @@
             <td class="text-center"><?= $item['Fazenda']['nome'] ?></td>
             <td class="text-center"><?= $item['Pessoa']['nome_fantasia'] ?></td>
             <td class="text-center"><?= $item['PagamentoCategoria']['categoria'] ?></td>
+            <td class="text-center"><?= $item['ContaGrupo']['nome'] ?></td>
+            <td class="text-center"><?= $item['ContaSubgrupo']['nome'] ?></td>
             <td class="text-center"><?= $item['PagamentoData']['nparcela'] ?>/<?= $item['PagamentoData']['_total_parcelas'] ?></td>
             <td class="text-center">R$ <?= number_format($item['PagamentoData']['valor'],2,',','.'); ?></td>
             <td class="text-center"><?= $item['PagamentoData']['observacoes'] ?></td>
@@ -46,7 +50,7 @@
         <?php $total += $item['PagamentoData']['valor']; ?>
     <?php endforeach; ?>
     <tr>
-        <td colspan="9">Total: <strong>R$ <?= number_format($total, 2, ',', '.') ?></strong></td>
+        <td colspan="10">Total: <strong>R$ <?= number_format($total, 2, ',', '.') ?></strong></td>
     </tr>
 
     </tbody>

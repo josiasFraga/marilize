@@ -32,7 +32,8 @@ class ContasController extends AppController {
             "PagamentoData.data_pago",
             "Fazenda.nome",
             "Pessoa.nome_fantasia",
-            "PagamentoCategoria.categoria",
+            "ContaGrupo.nome",
+            "ContaSubgrupo.nome",
             "",
             "PagamentoData.valor",
             "",
@@ -85,6 +86,14 @@ class ContasController extends AppController {
         if ( $this->dataTable->check_filtro("categoria_id", "numeric") === true){
             $conditions = array_merge($conditions, array("PagamentoData.categoria_id" => $this->request->data["categoria_id"]));
         }
+
+        if ( $this->dataTable->check_filtro("grupo_id", "numeric") === true){
+            $conditions = array_merge($conditions, array("PagamentoData.grupo_id" => $this->request->data["grupo_id"]));
+        }
+
+        if ( $this->dataTable->check_filtro("subgrupo_id", "numeric") === true){
+            $conditions = array_merge($conditions, array("PagamentoData.subgrupo_id" => $this->request->data["subgrupo_id"]));
+        }
         
         if ( $this->dataTable->check_filtro("status_id", "numeric") === true){
             $conditions = array_merge($conditions, array("PagamentoData.status_id" => $this->request->data["status_id"]));
@@ -113,6 +122,8 @@ class ContasController extends AppController {
                 'PagamentoForma.*',
                 'Fazenda.nome',
                 'Safra.nome',
+                'ContaGrupo.nome',
+                'ContaSubgrupo.nome',
                 'Pessoa.nome_fantasia'
             ),
             'link' => array(
@@ -121,7 +132,9 @@ class ContasController extends AppController {
                 'PagamentoForma',
                 'Fazenda',
                 'Pessoa',
-                'Safra'
+                'Safra',
+                'ContaGrupo',
+                'ContaSubgrupo'
             ),
             'offset' => $iDisplayStart,
             'limit' => $iDisplayLength
@@ -135,7 +148,9 @@ class ContasController extends AppController {
                 'PagamentoCategoria',
                 'PagamentoStatus',
                 'PagamentoForma',
-                'Safra'
+                'Safra',                
+                'ContaGrupo',
+                'ContaSubgrupo'
             ),
         ));
 
@@ -177,6 +192,8 @@ class ContasController extends AppController {
                 $actions = "";
  
                 $categoria = $dado['PagamentoCategoria']['categoria'];
+                $grupo = $dado['ContaGrupo']['nome'];
+                $subgrupo = $dado['ContaSubgrupo']['nome'];
 
                 $status = "";
                 if ($dado['PagamentoStatus']['id'] == 1 && $data_venc_compara <= $hoje) {
@@ -209,6 +226,8 @@ class ContasController extends AppController {
                     $dado['Fazenda']['nome'],
                     $dado['Pessoa']['nome_fantasia'],
                     $categoria,
+                    $grupo,
+                    $subgrupo,
                     $nparcela . '/' . $nparcelas_total,
                     $valor,
                     $obs,
@@ -1089,12 +1108,17 @@ class ContasController extends AppController {
             $conditions = array_merge($conditions, array("PagamentoData.categoria_id" => $this->request->query["categoria_id"]));
         }
 
+        if (isset($this->request->query["grupo_id"]) && !empty($this->request->query['grupo_id'])){
+            $conditions = array_merge($conditions, array("PagamentoData.grupo_id" => $this->request->query["grupo_id"]));
+        }
+
+        if (isset($this->request->query["subgrupo_id"]) && !empty($this->request->query['subgrupo_id'])){
+            $conditions = array_merge($conditions, array("PagamentoData.subgrupo_id" => $this->request->query["subgrupo_id"]));
+        }
+
         if (isset($this->request->query['status_id']) && !empty($this->request->query['status_id'])) {
             $conditions = array_merge($conditions, array("PagamentoData.status_id" => $this->request->query["status_id"]));
         }
-
-
-    
 
 
         $this->loadModel('PagamentoData');
@@ -1131,8 +1155,6 @@ class ContasController extends AppController {
 
     public function imprimir($tipo=null) {
         $this->layout = 'pdf';
-
-        
 
         $conditions = array();
 
@@ -1188,6 +1210,14 @@ class ContasController extends AppController {
             $conditions = array_merge($conditions, array("PagamentoData.categoria_id" => $this->request->query["categoria_id"]));
         }
 
+        if ( $this->dataTable->check_filtro("grupo_id", "numeric") === true){
+            $conditions = array_merge($conditions, array("PagamentoData.grupo_id" => $this->request->data["grupo_id"]));
+        }
+
+        if ( $this->dataTable->check_filtro("subgrupo_id", "numeric") === true){
+            $conditions = array_merge($conditions, array("PagamentoData.subgrupo_id" => $this->request->data["subgrupo_id"]));
+        }
+
         if (isset($this->request->query['status_id']) && !empty($this->request->query['status_id'])) {
             $conditions = array_merge($conditions, array("PagamentoData.status_id" => $this->request->query["status_id"]));
         }
@@ -1208,7 +1238,9 @@ class ContasController extends AppController {
                 'PagamentoForma',
                 'Fazenda',
                 'Pessoa',
-                'Safra'
+                'Safra',
+                'ContaGrupo',
+                'ContaSubgrupo'
             )
         );        
 

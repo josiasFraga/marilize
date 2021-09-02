@@ -103,7 +103,7 @@ var Index = function () {
 
 		$.get(baseUrl + 'Contas/total/s', params,function(data){
 
-			$('table#table-pagarpagamentos tfoot tr th:eq(8)').html(data);
+			$('table#table-pagarpagamentos tfoot tr th:eq(10)').html(data);
 
 		});
 
@@ -159,6 +159,8 @@ var Index = function () {
 					{  },
 					{  },
 					{  },
+					{  },
+					{  },
 					{ 'bSortable' : false, "sClass": "text-center" },
 					{ "sClass": "text-center" },
 					{ 'bSortable' : false},
@@ -168,7 +170,6 @@ var Index = function () {
 					
 				],
 
-				"bStateSave": false, // save datatable state(pagination, sort, etc) in cookie.
 				"sDom": "t<'row'<'col-md-8 col-sm-12'pi><'col-md-4 col-sm-12'>>",
 
 				"lengthMenu": [
@@ -481,7 +482,7 @@ var Index = function () {
 		$("input.moeda").keyup(function () { mascara(this, mvalor) });
 
 		$(".select2").select2({
-			placeholder: "Selecione..",
+			placeholder: "[FILTRO]",
 			width: 'element',
 			allowClear: true
 		});
@@ -633,6 +634,40 @@ var Index = function () {
 		});
 	}
 
+    var initDependents = function (){
+
+        $('select#grupo_id').change(function(){
+    
+            var grupo_id = $(this).val();
+            $('#subgrupo_id').html('<option value="">carregando...</option>');
+    
+            App.blockUI({
+	            target: 'form#adicionar-contap',
+	            boxed: true,
+	            message: 'Carregando subgrupos, aguarde...'
+	        });
+
+	        $.getJSON(baseUrl+'ContasPagar/subgrupos_dependents/'+grupo_id, {}, function(data){
+                var dados = data.dados;
+                if ( dados.length == 0 ) {
+                    $('#subgrupo_id').html('<option value="">nenhum subgrupo encontrado!</option>');
+                } else {
+                    $('#subgrupo_id').html('<option value="">[Subgrupo]</option>');                    
+                }
+                
+
+	        	$.each(dados,function(index, val){
+	        		$('#subgrupo_id').append('<option value="'+index+'">'+val+'</option>');
+	        	});
+
+	        	App.unblockUI('form#adicionar-contap');
+
+	        	$('#subgrupo_id').select2();
+
+	        });
+        });
+	}
+
 	$('#modalDataPago').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget); // Button that triggered the modal
 		var recipient = button.data('whatever'); // Extract info from data-* attributes
@@ -660,6 +695,7 @@ var Index = function () {
 			initMasks();
 			handleValidationAlterar();
 			initPrint();
+			initDependents();
 			// initPago();
 			// handleSample();
 		}

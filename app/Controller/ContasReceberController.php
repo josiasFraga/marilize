@@ -31,10 +31,13 @@ class ContasReceberController extends ContasController {
         $this->loadModel('Safra');
         $safras = $this->Safra->listaSafras();
 
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
+
         $safra_atual = $this->Safra->buscaSafraAtual();
 
 
-        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual'));
+        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual', 'grupos'));
     }
 
     public function adicionar() {

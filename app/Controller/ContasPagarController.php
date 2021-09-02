@@ -33,8 +33,10 @@ class ContasPagarController extends ContasController {
 
         $safra_atual = $this->Safra->buscaSafraAtual();
 
+        $this->loadModel('ContaGrupo');
+        $grupos = $this->ContaGrupo->listaGrupos();
 
-        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual'));
+        $this->set(compact('status', 'categorias', 'listformas', 'fazendas', 'fornecedores', 'safras', 'safra_atual', 'grupos'));
     }
 
     public function adicionar() {

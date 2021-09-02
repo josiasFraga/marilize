@@ -75,6 +75,39 @@ var Index = function () {
 			})
 		})
 	}
+	
+	var calclulaTotal = function() {
+
+		params = {};
+
+		// get all typeable inputs
+		$('textarea.form-filter, select.form-filter, input.form-filter:not([type="radio"],[type="checkbox"])', $("#table-receberpagamentos")).each(function() {
+			let name = $(this).attr("name");
+			let valor = $(this).val()
+			params[name] = valor;
+		});
+
+		// get all checkboxes
+		$('input.form-filter[type="checkbox"]:checked', $("#table-receberpagamentos")).each(function() {
+			let name = $(this).attr("name");
+			let valor = $(this).val()
+			params[name] = valor;
+		});
+
+		// get all radio buttons
+		$('input.form-filter[type="radio"]:checked', $("#table-receberpagamentos")).each(function() {
+			let name = $(this).attr("name");
+			let valor = $(this).val()
+			params[name] = valor;
+		});
+
+		$.get(baseUrl + 'Contas/total/e', params,function(data){
+
+			$('table#table-receberpagamentos tfoot tr th:eq(10)').html(data);
+
+		});
+
+	}
 
 	var handleRecords = function () {
 
@@ -116,22 +149,23 @@ var Index = function () {
 					}
 				},
 
-			"aoColumns": [
-				{ 'bSortable' : false, "sClass": "text-center" },
-				{ "sClass": "text-center" },
-				{ "sClass": "text-center" },
-				{ "sClass": "text-center" },
-				{  },
-				{  },
-				{  },
-				{ 'bSortable' : false, "sClass": "text-center" },
-				{ "sClass": "text-center" },
-				{ 'bSortable' : false},
-				{ "sClass": "text-center" },
-				{ 'bSortable' : false, "sClass": "text-center" },
-			],
+				"aoColumns": [
+					{ 'bSortable' : false, "sClass": "text-center" },
+					{ "sClass": "text-center" },
+					{ "sClass": "text-center" },
+					{ "sClass": "text-center" },
+					{  },
+					{  },
+					{  },
+					{  },
+					{  },
+					{ 'bSortable' : false, "sClass": "text-center" },
+					{ "sClass": "text-center" },
+					{ 'bSortable' : false},
+					{ "sClass": "text-center" },
+					{ 'bSortable' : false, "sClass": "text-center" },
+				],
 
-				"bStateSave": false, // save datatable state(pagination, sort, etc) in cookie.
 				"sDom": "t<'row'<'col-md-8 col-sm-12'pi><'col-md-4 col-sm-12'>>",
 
 				"lengthMenu": [
@@ -345,39 +379,6 @@ var Index = function () {
 				});
 			}
 		});
-	}
-	
-	var calclulaTotal = function() {
-
-		params = {};
-
-		// get all typeable inputs
-		$('textarea.form-filter, select.form-filter, input.form-filter:not([type="radio"],[type="checkbox"])', $("#table-receberpagamentos")).each(function() {
-			let name = $(this).attr("name");
-			let valor = $(this).val()
-			params[name] = valor;
-		});
-
-		// get all checkboxes
-		$('input.form-filter[type="checkbox"]:checked', $("#table-receberpagamentos")).each(function() {
-			let name = $(this).attr("name");
-			let valor = $(this).val()
-			params[name] = valor;
-		});
-
-		// get all radio buttons
-		$('input.form-filter[type="radio"]:checked', $("#table-receberpagamentos")).each(function() {
-			let name = $(this).attr("name");
-			let valor = $(this).val()
-			params[name] = valor;
-		});
-
-		$.get(baseUrl + 'Contas/total/e', params,function(data){
-
-			$('table#table-receberpagamentos tfoot tr th:eq(8)').html(data);
-
-		});
-
 	}
 
 	var initPickers = function(){
@@ -628,6 +629,41 @@ var Index = function () {
 		});
 	}
 
+    var initDependents = function (){
+
+        $('select#grupo_id').change(function(){
+    
+            var grupo_id = $(this).val();
+            $('#subgrupo_id').html('<option value="">carregando...</option>');
+    
+            App.blockUI({
+	            target: 'form#adicionar-contap',
+	            boxed: true,
+	            message: 'Carregando subgrupos, aguarde...'
+	        });
+
+	        $.getJSON(baseUrl+'ContasPagar/subgrupos_dependents/'+grupo_id, {}, function(data){
+                var dados = data.dados;
+                if ( dados.length == 0 ) {
+                    $('#subgrupo_id').html('<option value="">nenhum subgrupo encontrado!</option>');
+                } else {
+                    $('#subgrupo_id').html('<option value="">[Subgrupo]</option>');                    
+                }
+                
+
+	        	$.each(dados,function(index, val){
+	        		$('#subgrupo_id').append('<option value="'+index+'">'+val+'</option>');
+	        	});
+
+	        	App.unblockUI('form#adicionar-contap');
+
+	        	$('#subgrupo_id').select2();
+
+	        });
+        });
+
+    }
+
 	$('#modalDataPago').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget); // Button that triggered the modal
 		var recipient = button.data('whatever'); // Extract info from data-* attributes
@@ -655,6 +691,7 @@ var Index = function () {
 			initMasks();
 			handleValidationAlterar();
 			initPrint();
+			initDependents();
 			// initPago();
 			// handleSample();
 		}

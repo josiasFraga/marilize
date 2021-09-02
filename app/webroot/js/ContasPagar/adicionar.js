@@ -351,9 +351,7 @@ var Adicionar = function () {
 
 	        });
         });
-        
 
-			
     }
 
     return {

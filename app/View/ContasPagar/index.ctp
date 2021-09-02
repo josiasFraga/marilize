@@ -227,9 +227,11 @@
 							<th>Safra</th>
 							<th>Vencimento em</th>
 							<th>Pagamento em</th>
-							<th width="15%">Fazenda</th>
+							<th width="10%">Fazenda</th>
 							<th width="15%">Fornecedor</th>
-							<th width="10%">Categoria</th>
+							<th>Categoria</th>
+							<th>Grupo</th>
+							<th>Subgrupo</th>
 							<th>Nº Parcela</th>
 							<th width="10%">Valor</th>
 							<th>OBS</th>
@@ -239,7 +241,7 @@
 						<tr role="row" class="filter">
 							<td></td>
 							<td>
-								<select class="form-control form-filter input-sm select2" name="safra_id">
+								<select class="form-control form-filter input-sm select2" name="safra_id" autocomplete="off">
 									<option value="">[Safra]</option>
 									<?php 
 									foreach ($safras as $key => $nome) {
@@ -257,15 +259,15 @@
 								</select>
 							</td>
 							<td>
-								<input type="date" class="form-control form-filter input-sm" name="data_venc" value="<?= date('Y-m-01') ?>" style="margin-bottom:4px">
-								<input type="date" class="form-control form-filter input-sm" name="data_venc_ate" value="<?= date('Y-m-t') ?>">
+								<input type="date" class="form-control form-filter input-sm" name="data_venc" value="<?= date('Y-m-01') ?>" style="margin-bottom:4px" autocomplete="off">
+								<input type="date" class="form-control form-filter input-sm" name="data_venc_ate" value="<?= date('Y-m-t') ?>" autocomplete="off">
 							</td>
 							<td>
-								<input type="date" class="form-control form-filter input-sm" name="data_pgto" value="" style="margin-bottom:4px">
-								<input type="date" class="form-control form-filter input-sm" name="data_pgto_ate" value="">
+								<input type="date" class="form-control form-filter input-sm" name="data_pgto" value="" style="margin-bottom:4px" autocomplete="off">
+								<input type="date" class="form-control form-filter input-sm" name="data_pgto_ate" value="" autocomplete="off">
 							</td>
 							<td>
-								<select class="form-control form-filter input-sm select2" name="fazenda_id">
+								<select class="form-control form-filter input-sm select2" name="fazenda_id" autocomplete="off">
 									<option value="">Selecione ...</option>
 									<?php foreach ($fazendas as $key => $nome) { ?>
 										<option value="<?=$key?>"><?=$nome?></option>
@@ -273,7 +275,7 @@
 								</select>
 							</td>
 							<td>
-								<select class="form-control form-filter input-sm select2" name="fornecedor_id">
+								<select class="form-control form-filter input-sm select2" name="fornecedor_id" autocomplete="off">
 									<option value="">Selecione ...</option>
 									<?php foreach ($fornecedores as $key => $nome) { ?>
 										<option value="<?=$key?>"><?=$nome?></option>
@@ -281,18 +283,31 @@
 								</select>
 							</td>
 							<td>
-								<select class="form-control form-filter input-sm select2" name="categoria_id">
+								<select class="form-control form-filter input-sm select2" name="categoria_id" autocomplete="off">
 									<option value="">Selecione ...</option>
 									<?php foreach ($categorias as $key => $categoria) { ?>
 										<option value="<?=$key?>"><?=$categoria?></option>
 									<?php } ?>
 								</select>
 							</td>
+							<td>
+								<select class="form-control form-filter input-sm select2" name="grupo_id" id="grupo_id" autocomplete="off">
+									<option value="">[GRUPO]</option>
+									<?php foreach ($grupos as $key => $grupo) { ?>
+										<option value="<?=$key?>"><?=$grupo?></option>
+									<?php } ?>
+								</select>
+							</td>
+							<td>
+								<select class="form-control form-filter input-sm select2" name="subgrupo_id" id="subgrupo_id" autocomplete="off">
+									<option value="">[SUBGRUPO]</option>
+								</select>
+							</td>
 							<td></td>
 							<td></td>
 							<td></td>
 							<td>
-								<select class="form-control form-filter input-sm" name="status_id">
+								<select class="form-control form-filter input-sm" name="status_id" autocomplete="off">
 									<option value="">Selecione ...</option>
 									<option value="1">Aguardando Pagamento</option>
 									<!-- <option value="7">Cancelada</option> -->
@@ -315,6 +330,8 @@
 					</tbody>
 					<tfoot>
 						<tr>
+							<th></th>
+							<th></th>
 							<th></th>
 							<th></th>
 							<th></th>
