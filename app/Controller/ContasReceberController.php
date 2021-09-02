@@ -59,7 +59,7 @@ class ContasReceberController extends ContasController {
         $fazendas = $this->Fazenda->listaFazendas();
 
         $this->loadModel('Pessoa');
-        $fornecedores = $this->Pessoa->findListAllPessoas(2);
+        $fornecedores = $this->Pessoa->findListAllPessoas(1);
 
         $this->loadModel('ContaGrupo');
         $grupos = $this->ContaGrupo->listaGrupos();
@@ -109,7 +109,7 @@ class ContasReceberController extends ContasController {
         $fazendas = $this->Fazenda->listaFazendas();
 
         $this->loadModel('Pessoa');
-        $fornecedores = $this->Pessoa->findListAllPessoas(2);
+        $fornecedores = $this->Pessoa->findListAllPessoas(1);
 
         $this->loadModel('ContaGrupo');
         $grupos = $this->ContaGrupo->listaGrupos();

@@ -294,25 +294,25 @@ class RelatoriosController extends AppController {
 
         if (isset($dados_request['Relatorio']['fornecedor_id']) && !empty($dados_request['Relatorio']['fornecedor_id'])) {
 			$conditions = array_merge($conditions,[
-				'fornecedor_id' => $dados_request['Relatorio']['fornecedor_id'],
+				'PagamentoData.fornecedor_id' => $dados_request['Relatorio']['fornecedor_id'],
 			]);
 		}
 
         if (isset($dados_request['Relatorio']['grupo_id']) && !empty($dados_request['Relatorio']['grupo_id'])) {
 			$conditions = array_merge($conditions,[
-				'grupo_id' => $dados_request['Relatorio']['grupo_id'],
+				'PagamentoData.grupo_id' => $dados_request['Relatorio']['grupo_id'],
 			]);
 		}
 
         if (isset($dados_request['Relatorio']['status_id']) && !empty($dados_request['Relatorio']['status_id'])) {
 			$conditions = array_merge($conditions,[
-				'status_id' => $dados_request['Relatorio']['status_id'],
+				'PagamentoData.status_id' => $dados_request['Relatorio']['status_id'],
 			]);
 		}
 
         if (isset($dados_request['Relatorio']['forma_id']) && !empty($dados_request['Relatorio']['forma_id'])) {
 			$conditions = array_merge($conditions,[
-				'forma_id' => $dados_request['Relatorio']['forma_id'],
+				'PagamentoData.forma_id' => $dados_request['Relatorio']['forma_id'],
 			]);
 		}
 
