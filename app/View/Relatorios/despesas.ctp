@@ -48,7 +48,7 @@
 								<select class="form-control select2 required" name="data[Relatorio][safra_id]">
 									<option value="">Selecione ...</option>
 								<?php foreach ($safras as $key => $safra) { ?>
-                                    <option value="<?=$key?>"><?=$safra?></option>
+                                    <option value="<?=$key?>" <?php echo $key == $safra_atual['Safra']['id'] ? 'selected=""' : ''; ?>><?=$safra?></option>
                                 <?php } ?>
 								</select>
 							</div>
@@ -72,7 +72,7 @@
 								<select class="form-control select2 required" name="data[Relatorio][fazenda_id]">
 									<option value="">Selecione ...</option>
 								<?php foreach ($fazendas as $key => $fazenda) { ?>
-                                    <option value="<?=$key?>"><?=$fazenda?></option>
+                                    <option value="<?=$key?>" <?php echo $key == 17 ? 'selected=""' : ''; ?>><?=$fazenda?></option>
                                 <?php } ?>
 								</select>
 							</div>

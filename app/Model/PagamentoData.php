@@ -180,4 +180,23 @@ class PagamentoData extends AppModel {
             return null;
         }
     }
+
+    public function checkNoteNumber($ndocumento = null) {
+        if (is_null($ndocumento)) return [];
+
+        $checkNoteNumber = $this->find('first', array(
+            'conditions' => array(
+                'PagamentoData.ndocumento' => $ndocumento
+            ),
+            'fields' => array(
+                'PagamentoData.valor',
+                'PagamentoData.data_venc'
+            ),
+            'order' => array(
+                'PagamentoData.id DESC'
+            )
+        ));
+
+        return $checkNoteNumber;
+    }
 }

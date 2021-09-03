@@ -282,6 +282,8 @@ class RelatoriosController extends AppController {
 		$dados_request['Relatorio']['inicio'] = $this->dateBrEn($inicio);
 		$dados_request['Relatorio']['fim'] = $this->dateBrEn($fim);
 
+		$group = ['PagamentoData.grupo_id', 'PagamentoData.subgrupo_id'];
+
 		$conditions = [
 			'PagamentoData.tipo' => 'S',
 			'PagamentoData.ativo' => 'Y',
@@ -316,14 +318,21 @@ class RelatoriosController extends AppController {
 			]);
 		}
 
-		$group = ['PagamentoData.grupo_id', 'PagamentoData.subgrupo_id'];
+		if ( $dados_request['Relatorio']['categoria_id'] == 64 ) {
+			$group = ['CONCAT_WS(YEAR(PagamentoData.data_venc),MONTH(PagamentoData.data_venc)) '];
+			$this->PagamentoData->virtualFields['ano'] = "YEAR(PagamentoData.data_venc)";
+			$this->PagamentoData->virtualFields['mes'] = "MONTH(PagamentoData.data_venc)";
+		}
 
 		$this->PagamentoData->virtualFields['_total'] = "SUM(PagamentoData.valor)";
 		$dados = $this->PagamentoData->find('all',[
 			'fields' => ['*'],
 			'conditions' => $conditions,
 			'group' => $group,
-			'link' => ['ContaSubgrupo', 'ContaGrupo', 'Fazenda']
+			'link' => ['ContaSubgrupo', 'ContaGrupo', 'Fazenda'],
+			'order' => [
+				'PagamentoData.data_venc'
+			]
 		]);
 
 		if ( count($dados) == 0 ){
@@ -334,29 +343,50 @@ class RelatoriosController extends AppController {
 		$totais = [];
 		
 		foreach( $dados as $key => $dado ){
-			if ( !isset($totais[$dado['ContaGrupo']['id']]) ) {
-				$totais[$dado['ContaGrupo']['id']] = (float)$dado['PagamentoData']['_total'];
+
+			$agrupar_itens_por = $dado['ContaGrupo']['id'];
+			
+			if ( $dados_request['Relatorio']['categoria_id'] == 64 ) {
+				$agrupar_itens_por = 0;
+			}
+
+			if ( !isset($totais[$agrupar_itens_por]) ) {
+				$totais[$agrupar_itens_por] = (float)$dado['PagamentoData']['_total'];
 			}else{
-				$totais[$dado['ContaGrupo']['id']] += (float)$dado['PagamentoData']['_total'];
+				$totais[$agrupar_itens_por] += (float)$dado['PagamentoData']['_total'];
 				
 			}
 		}
 
+		//debug($totais); die();
+
 		foreach( $dados as $key => $dado ){
-			if ( !isset($dados_retornar[$dado['ContaGrupo']['id']]) ) {
-				$dados_retornar[$dado['ContaGrupo']['id']] = [
+
+			$agrupar_itens_por = $dado['ContaGrupo']['id'];
+			$subtitulo = $dado['ContaGrupo']['nome'];
+			$nome_pedaco = $dado['ContaSubgrupo']['nome']." - R$ ".number_format($dado['PagamentoData']['_total'],2,",",".");
+
+			
+			if ( $dados_request['Relatorio']['categoria_id'] == 64 ) {
+				$agrupar_itens_por = 0;
+				$nome_pedaco = $this->month_arr[(int)$dado['PagamentoData']['mes']]."/".$dado['PagamentoData']['ano']." - R$ ".number_format($dado['PagamentoData']['_total'],2,",",".");
+				$subtitulo = '';
+			}
+
+			if ( !isset($dados_retornar[$agrupar_itens_por]) ) {
+				$dados_retornar[$agrupar_itens_por] = [
 					'titulo' => 'Despesas '.$dado['Fazenda']['nome'].' de '.$dados_request['Relatorio']['inicio_fim'],
-					'subtitle' => $dado['ContaGrupo']['nome'],
+					'subtitle' => $subtitulo,
 					'data' => [[
-						'name' => $dado['ContaSubgrupo']['nome']." - R$ ".number_format($dado['PagamentoData']['_total'],2,",","."), 
-						'y' => (float)($dado['PagamentoData']['_total']*100)/$totais[$dado['ContaGrupo']['id']],
+						'name' => $nome_pedaco, 
+						'y' => (float)($dado['PagamentoData']['_total']*100)/$totais[$agrupar_itens_por],
 					]]
 				];
 
 			} else {
-				$dados_retornar[$dado['ContaGrupo']['id']]['data'][] = [
-					'name' => $dado['ContaSubgrupo']['nome']." - R$ ".number_format($dado['PagamentoData']['_total'],2,",","."), 
-					'y' => (float)($dado['PagamentoData']['_total']*100)/$totais[$dado['ContaGrupo']['id']],
+				$dados_retornar[$agrupar_itens_por]['data'][] = [
+					'name' => $nome_pedaco, 
+					'y' => (float)($dado['PagamentoData']['_total']*100)/$totais[$agrupar_itens_por],
 				];
 
 			}

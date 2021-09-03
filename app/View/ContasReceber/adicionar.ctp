@@ -45,6 +45,7 @@
 			</div>
 		
             <input type="hidden" name="data[PagamentoData][tipo]" value="E">
+            <input type="hidden" name="data[PagamentoData][confirm_same_note]" value="n" id="confirm_same_note">
 
 			<div class="alert alert-danger display-hide">
 				<button class="close" data-close="alert"></button>
@@ -69,7 +70,7 @@
 								<select class="form-control select2 required" name="data[PagamentoData][safra_id]">
 									<option value="">Selecione ...</option>
 								<?php foreach ($safras as $key => $safra) { ?>
-                                    <option value="<?=$key?>"><?=$safra?></option>
+                                    <option value="<?=$key?>" <?php echo $key == $safra_atual['Safra']['id'] ? 'selected=""' : ''; ?>><?=$safra?></option>
                                 <?php } ?>
 								</select>
 							</div>
@@ -83,7 +84,7 @@
 								<select class="form-control select2 required" name="data[PagamentoData][fazenda_id]">
 									<option value="">Selecione ...</option>
 								<?php foreach ($fazendas as $key => $fazenda) { ?>
-                                    <option value="<?=$key?>"><?=$fazenda?></option>
+                                    <option value="<?=$key?>" <?php echo $key == 17 ? 'selected=""' : ''; ?>><?=$fazenda?></option>
                                 <?php } ?>
 								</select>
 							</div>
@@ -279,6 +280,7 @@ $this->Html->script('/metronic/assets/global/plugins/dependent-dropdown-master/j
 $this->Html->script('/metronic/assets/global/plugins/select2/js/select2.full.min', array('block' => 'scriptBottom'));
 $this->Html->script('/metronic/assets/global/plugins/select2/js/i18n/pt-BR', array('block' => 'scriptBottom'));
 $this->Html->script('/metronic/assets/global/plugins/icheck/icheck.min', array('block' => 'scriptBottom'));
+$this->Html->script('//cdn.jsdelivr.net/npm/sweetalert2@11', array('block' => 'scriptBottom'));
 //$this->Html->script('/metronic/assets/global/plugins/dependent-dropdown-master/js/dependent-dropdown.min', array('block' => 'scriptBottom'));
 /*-- END PAGE LEVEL PLUGINS --*/
 

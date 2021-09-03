@@ -318,6 +318,21 @@ class ContasController extends AppController {
         $grupo_id = $dados_request['PagamentoData']['grupo_id'];
         $subgrupo_id = $dados_request['PagamentoData']['subgrupo_id'];
         $conta_id = md5(time().uniqid());
+
+        if ( $ndocumento != '' && isset($dados_request['PagamentoData']['confirm_same_note']) && $dados_request['PagamentoData']['confirm_same_note'] == 'n' ) {
+
+            $verifica_n_nota = $this->PagamentoData->checkNoteNumber($ndocumento);
+
+            if ( count($verifica_n_nota) > 0) {
+                return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 
+                    'status' => 'confirm', 
+                    'msg' => "Já existe um lançamento cadastrado com esse mesmo nº de documento no valor de R$ ".
+                        number_format($verifica_n_nota['PagamentoData']['valor'],2,',','.').
+                        ' com vencimento para '.date('d/m/Y',strtotime($verifica_n_nota['PagamentoData']['data_venc']))
+                    ))));
+            }
+
+        }
         
         $dados_salvar = array();
 

@@ -229,6 +229,24 @@ var Adicionar = function () {
                         $('#status_pagto').val("");
                         form.reset();                        
                         $('#parcelas .modal-body').html("");
+                    }else if(data.status == "confirm"){
+                        Swal.fire({
+                            title: 'Você tem certeza?',
+                            text: data.msg,
+                            showDenyButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: `Salvar mesmo assim`,
+                            denyButtonText: `Não Salvar`,
+                          }).then((result) => {
+                            /* Read more about isConfirmed, isDenied below */
+                            if (result.isConfirmed) {
+                                $('input#confirm_same_note').val('s');
+                                $("form#adicionar-contap button[type=submit]").trigger('click');
+                            } else if (result.isDenied) {
+                              Swal.fire('O lançamento não foi salvo', '', 'info')
+                            }
+                        })
+                    
                     }else if(data.status == "warning"){
                         
                         $("form#adicionar-contap .alert-warning span.message").html(data.msg);
