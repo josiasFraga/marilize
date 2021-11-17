@@ -69,72 +69,29 @@ var Gerar = function () {
                             window.exportUrl = 'https://export.highcharts.com/';
                             var graficos = {};
                             $.each(data.dados, function (index, dado) {
-                                    var optionsStr = JSON.stringify({
-                                        chart: {
-                                            plotBackgroundColor: null,
-                                            plotBorderWidth: null,
-                                            plotShadow: false,
-                                            type: 'pie'
-                                        },
-                                        title: {
-                                            text: dado.titulo
-                                        },
-                                        subtitle: {
-                                            text: dado.subtitle
-                                        },
-                                        tooltip: {
-                                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                                        },
-                                        accessibility: {
-                                            point: {
-                                                valueSuffix: '%'
-                                            }
-                                        },
-                                        plotOptions: {
-                                            pie: {
-                                                allowPointSelect: true,
-                                                cursor: 'pointer',
-                                                dataLabels: {
-                                                    enabled: true,
-                                                    format: '<b>{point.name}</b> - {point.percentage:.1f} %'
-                                                }
-                                            }
-                                        },
-                                        series: [{
-                                            name: 'Brands',
-                                            colorByPoint: true,
-                                            data: dado.data
-                                        }],
-                                    }), dataString = encodeURI('async=true&type=jpeg&width=1400&options=' + optionsStr);
+								//dado.titulo
+								//dado.subtitle
+								//dado.data
+								$.ajax({
+									type: 'GET',
+									data: dado,
+									cache: false,
+									url: baseUrl +  'highcharts/generate_image/',
+									success: function (data) {
+										console.log('get the file from relative url: ', data.data);
+										graficos[index] = 'https://export.highcharts.com/' + data.data;
+									},
+									error: function (err) {
+										console.log('error', err.statusText);
+									}
+								});
 
-                                    if (window.XDomainRequest) {
-                                        var xdr = new XDomainRequest();
-                                        xdr.open("post", window.exportUrl + '?' + dataString);
-                                        xdr.onload = function () {
-                                            graficos[index] = window.exporturl + xdr.responseText;
-                                        };
-                                        xdr.send();
-                                    } else {
-                                        $.ajax({
-                                            type: 'POST',
-                                            data: dataString,
-                                            url: window.exportUrl,
-                                            success: function (data) {
-                                                console.log('get the file from relative url: ', data);
-                                                graficos[index] = 'https://export.highcharts.com/' + data;
-                                            },
-                                            error: function (err) {
-                                                console.log('error', err.statusText);
-                                            }
-                                        });
-                                    }
-
-                                });
+                            });
                             setTimeout(() => {
                                 
                                 let params_str = new URLSearchParams(graficos).toString();
                                 window.open(baseUrl + 'Relatorios/imprimir_pizzas/?' + params_str, '_blank').focus();
-                            },3000);
+                            },5000);
 
                             console.log(graficos);
 						}else if(data.status == "warning"){

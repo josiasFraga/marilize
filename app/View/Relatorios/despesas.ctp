@@ -179,7 +179,8 @@ $this->Html->css('/metronic/assets/global/plugins/bootstrap-timepicker/css/boots
 $this->Html->css('/metronic/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min', array('block' => 'cssPage'));
 
 /*-- BEGIN PAGE LEVEL PLUGINS --*/
-$this->Html->script('http://code.highcharts.com/highcharts.js', array('block' => 'scriptBottom'));
+$this->Html->script('https://code.highcharts.com/highcharts.js', array('block' => 'scriptBottom'));
+$this->Html->script('https://www.ajaxproxy.com/js/ajaxproxy.js', array('block' => 'scriptBottom'));
 $this->Html->script('/metronic/assets/global/plugins/jquery.form.min', array('block' => 'scriptBottom'));
 $this->Html->script('/metronic/assets/global/plugins/jquery.metadata', array('block' => 'scriptBottom'));
 $this->Html->script('/metronic/assets/global/plugins/jquery-validation/js/jquery.validate.min', array('block' => 'scriptBottom'));
