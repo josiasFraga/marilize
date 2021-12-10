@@ -76,10 +76,10 @@ var Gerar = function () {
 									type: 'GET',
 									data: dado,
 									cache: false,
-									url: baseUrl +  'highcharts/generate_image/',
+									url: baseUrl +  'HighCharts/generate_image/',
 									success: function (data) {
 										console.log('get the file from relative url: ', data.data);
-										graficos[index] = 'https://export.highcharts.com/' + data.data;
+										graficos[index] = data.data;
 									},
 									error: function (err) {
 										console.log('error', err.statusText);

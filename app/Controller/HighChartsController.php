@@ -15,11 +15,13 @@ class HighChartsController extends AppController {
             }
 
         }
+
+
         $optionsStr = [
-            'async' => 'true',
+            //'async' => 'true',
             'type' => 'jpeg',
             'width' => '1400',
-            'options' => [
+            'infile' => [
               "chart" => [
                 "plotBackgroundColor" => null,
                 "plotBorderWidth" => null,
@@ -59,6 +61,8 @@ class HighChartsController extends AppController {
               ]
             ]
         ];
+        $optionsStr = json_encode($optionsStr);
+        //$optionsStr = json_encode($optionsStr);
 
         //debug($this->curl_postfields_flatten($optionsStr));
         //debug($optionsStr); 
@@ -75,14 +79,16 @@ class HighChartsController extends AppController {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         //curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-type: multipart/form-data"));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen( $optionsStr ), 'Accept: application/json'));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($optionsStr));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $optionsStr);
+        curl_setopt($ch, CURLOPT_HEADER, 0 );
         curl_setopt($ch, CURLOPT_POST, 1);
         $response = curl_exec($ch);
-        //debug($response);
-        //die();
-        return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'ok', 'data' => $response))));
+        curl_close($ch);
+        $filename = time() . '.jpeg';
+        file_put_contents( $filename, $response);
+        return new CakeResponse( array( 'type' => 'json', 'body' => json_encode( array( 'status' => 'ok', 'data' => $filename))));
 
     }
     function curl_postfields_flatten($data, $prefix = '') {
