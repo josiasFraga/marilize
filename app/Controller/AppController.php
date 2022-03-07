@@ -34,7 +34,7 @@ class AppController extends Controller {
  	public $month_arr = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 	public $images_path = "https://orelhano.com.br/sistema/img/";
 	public $prazo_contas_dashboard = 30;
- 	
+
     public $components = array(
         // 'DebugKit.Toolbar',
 		'Session',
