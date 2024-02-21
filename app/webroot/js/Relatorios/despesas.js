@@ -90,7 +90,8 @@ var Gerar = function () {
                             setTimeout(() => {
                                 
                                 let params_str = new URLSearchParams(graficos).toString();
-                                window.open(baseUrl + 'Relatorios/imprimir_pizzas/?' + params_str, '_blank').focus();
+								console.log(baseUrl + 'Relatorios/imprimir_pizzas/?' + params_str);
+                                window.open('https://zapshop.com.br'+ baseUrl + 'Relatorios/imprimir_pizzas/?' + params_str, '_blank').focus();
                             },5000);
 
                             console.log(graficos);
